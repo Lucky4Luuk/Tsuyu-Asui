@@ -2,7 +2,7 @@ import discord
 import asyncio
 
 f = open("token.txt")
-TOKEN = f.read()
+TOKEN = f.read().strip()
 f.close()
 
 client = discord.Client()
@@ -13,6 +13,8 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    for server in client.servers :
+        print("Name: {}\nID: {}".format(server.name, server.id))
 
 @client.event
 async def on_message(message):
