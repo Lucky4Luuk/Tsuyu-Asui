@@ -19,7 +19,7 @@ client = discord.Client()
 def generate_error(code) :
     return "ERROR {}: {} <a:TsuTearsBot:541326614143959050>".format(code, ERROR_CODES[code])
 
-def import_config(server) :
+def import_config(server, retry=True) :
     print("====Loading Config====\nServer Name: {}\nID: {}\n\n".format(server.name, server.id))
     try :
         f = open("{}-config.json".format(server.id), encoding="latin-1")
@@ -27,15 +27,42 @@ def import_config(server) :
         f.close()
     except Exception as e :
         print(e)
+        #create a new config file
+        f = open("empty-config.json", encoding="latin-1")
+        data = f.read()
+        f.close()
+        f = open("{}-config.json".format(server.id), "a+", encoding="latin-1")
+        f.write(data)
+        f.close()
+        if retry :
+            import_config(server, retry=False)
 
 def import_all_configs() :
     for server in client.servers :
         import_config(server)
 
+def save_config(server) :
+    print("====Saving Config====\nServer Name: {}\nID: {}\n\n".format(server.name, server.id))
+    try :
+        f = open("{}-config.json".format(server.id), "w+", encoding="latin-1")
+        f.seek(0)
+        f.truncate()
+        f.write(json.dumps(configs[server.id]))
+        f.close()
+    except Exception as e :
+        print(e)
+
+def save_all_configs() :
+    for server in client.servers :
+        save_config(server)
+
 def get_config_embed() :
     embed=discord.Embed(title="Config", description="", color=0x00b700)
     #embed.set_footer(text="Page {}".format(page_number))
     return embed
+
+def warn_user(modid, id, reason, messageid) :
+    print("yeet")
 
 @client.event
 async def on_ready():
@@ -55,9 +82,15 @@ async def on_member_join(member):
 
 @client.event
 async def on_message(message):
+    if message.server == None : #PM
+        f = open("DM_LOGS.txt", "r+")
+        f.write("{}: {}\n".format(message.author.name, message.content))
+        f.close()
+
     if message.content == message.server.me.mention :
         await client.send_message(message.channel, "Hello! Do you need help with anything? Feel free to use ta!help at any point if you need my help <:TsuComfyBot:541315853149536257>")
-    elif message.content.startswith("ta!lmgtfy") :
+
+    if message.content.startswith("ta!lmgtfy") :
         args = message.content.split("ta!lmgtfy")[1].lstrip().rstrip().split(" ")
         result = generate_error("101")
         if len(args) > 0 and not (len(args) == 1 and args[0] == '') :
@@ -94,6 +127,22 @@ async def on_message(message):
         else :
             await client.send_message(message.channel, generate_error("303"))
 
+    elif message.content.startswith("ta!warn") :
+        if message.author.server_permissions :
+            if message.author.server_permissions.administrator :
+                #do a warn
+                args = message.content[8:].split(" ")
+                id = args[0].replace("<","").replace("@","").replace(">","")
+                args.pop(0)
+                reason = ""
+                for arg in args :
+                    reason += arg + " "
+                warn_user(message.server.get_member(id), reason)
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
+
     elif message.content.startswith("ta!") :
         await client.send_message(message.channel, generate_error("301"))
 
@@ -109,7 +158,8 @@ async def on_message(message):
             else :
                 await client.send_message(message.channel, generate_error("201"))
         elif message.content.startswith("ta!save_configs") :
-            print("no")
+            save_all_configs()
+            await client.send_message(message.channel, "No problem <:TsuAdorableBot:541315335169507345>")
 
         elif message.content.startswith("ta!") :
             await client.send_message(message.channel, generate_error("301"))
