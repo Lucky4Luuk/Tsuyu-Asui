@@ -1,3 +1,9 @@
 {
-  "101": "Please specify at least 1 argument (LMGTFY)"
+  "101": "Please specify at least 1 argument (LMGTFY)",
+
+  "201": "Cannot run this command in PM (Reload Current Config File)",
+
+  "301": "Unknown command!",
+  "302": "You don't have the permission to run this command (Admin Command)",
+  "303": "Cannot run this command in PM (Admin Command)"
 }
