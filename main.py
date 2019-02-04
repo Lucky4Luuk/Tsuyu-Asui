@@ -232,6 +232,25 @@ async def on_message(message):
                 await client.send_message(message.channel, generate_error("302"))
         else :
             await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!kick") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                #do a kick
+                args = message.content[7:].split(" ")
+                id = args[0].replace("<","").replace("@","").replace(">","").replace("!","")
+                args.pop(0)
+                reason = ""
+                for arg in args :
+                    reason += arg + " "
+                warn_channel = message.server.get_channel(str(configs[message.server.id]["Mod"]["TextChannel"]))
+                embed, case_number = kick_user(message.server, message.author.id, id, reason)
+                await client.send_message(message.channel, "*User {} has been kicked...*".format(id))
+                msg = await client.send_message(warn_channel, embed=embed)
+                configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
     elif message.content.startswith("ta!ban") :
         if message.author.server_permissions :
             if is_moderator(message.author) :
@@ -244,7 +263,7 @@ async def on_message(message):
                     reason += arg + " "
                 warn_channel = message.server.get_channel(str(configs[message.server.id]["Mod"]["TextChannel"]))
                 embed, case_number = ban_user(message.server, message.author.id, id, reason)
-                await client.send_message(message.channel, "*User {} has been ban...*".format(id))
+                await client.send_message(message.channel, "*User {} has been banned...*".format(id))
                 msg = await client.send_message(warn_channel, embed=embed)
                 configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
             else :
