@@ -1,0 +1,8 @@
+{'type': 'rich',
+'author':
+{
+'proxy_icon_url': 'https://images-ext-1.discordapp.net/external/AtAn0jBEWKLsnta9HOz4cJJ2JEpOYIS3_XodK0dxqoo/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/183315569745985545/a_20eb3e8482402a20ea9fc0be65aa667a.gif',
+'name': 'Case #206 | Warning | Luuk#5979',
+'icon_url': 'https://cdn.discordapp.com/avatars/183315569745985545/a_20eb3e8482402a20ea9fc0be65aa667a.gif?size=1024'},
+'fields':
+[{'value': '<@183315569745985545>', 'inline': True, 'name': 'User'}, {'value': '<@183315569745985545>', 'inline': True, 'name': 'Moderator'}, {'value': 'Please set a reason using ta!set_reason <case_number> <reason> <:TsuSmileBot:541997306413580288>', 'inline': False, 'name': 'Reason'}], 'footer': {'text': 'ID: 183315569745985545 � Mon Feb  4 16:31:02 2019'}, 'color': 16440598}

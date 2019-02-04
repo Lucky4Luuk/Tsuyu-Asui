@@ -123,9 +123,10 @@ def ban_user(server, modid, id, reason) :
     #save_config(server)
     return embed, case_number
 
-def set_reason(server, case_number, reason) :
+def set_reason(server, warn_channel, case_number, msgid, msg, reason) :
+    old_embed = msg.embeds[0] #always the first embed, because that's how the commands work
     if reason.strip() == "" :
-        reason = "Please set a reason using ta!set_reason <case_number> <reason> <:TsuSmileBot:541997306413580288>"
+        reason = old_embed["fields"][2]["value"]
     case = configs[server.id]["Mod"]["Cases"][case_number-1]
     id = case["UserId"]
     modid = case["ModId"]
@@ -134,13 +135,16 @@ def set_reason(server, case_number, reason) :
     moderator = server.get_member(modid)
     configs[server.id]["Mod"]["Cases"].append(case)
     timestamp = datetime.datetime.now()
-    embed = discord.Embed(color=FIRE_RED)
-    embed.set_author(name="Case #{case_number} | Ban | {name}#{tag}".format(case_number=case_number, name=member.name, tag=member.discriminator), icon_url=member.avatar_url)
-    embed.add_field(name="User", value=member.mention, inline=True)
-    embed.add_field(name="Moderator", value=moderator.mention, inline=True)
-    embed.add_field(name="Reason", value=reason, inline=False)
-    embed.set_footer(text="ID: {} • {} (edited)".format(id, timestamp.strftime("%c")))
-    return case["MessageId"]
+    col = BEE_YELLOW
+    if case["CaseType"] == 1 :
+        col = FIRE_RED
+    embed = discord.Embed(color=col)
+    embed.set_author(name=old_embed["author"]["name"], icon_url=old_embed["author"]["icon_url"])
+    embed.add_field(name="User", value=old_embed["fields"][0]["value"], inline=True)
+    embed.add_field(name="Moderator", value=old_embed["fields"][1]["value"], inline=True)
+    embed.add_field(name="Reason", value=reason + " (edited)", inline=False)
+    embed.set_footer(text="ID: {} • {}".format(id, timestamp.strftime("%c")))
+    return embed
 
 def is_moderator(member) :
     return member.server_permissions.administrator or member.server_permissions.kick_members or member.server_permissions.ban_members
@@ -222,7 +226,7 @@ async def on_message(message):
                 embed, case_number = warn_user(message.server, message.author.id, id, reason)
                 await client.send_message(message.channel, "*User {} has been warned...*".format(id))
                 msg = await client.send_message(warn_channel, embed=embed)
-                configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = msg.id
+                configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
                 save_config(message.server)
             else :
                 await client.send_message(message.channel, generate_error("302"))
@@ -232,7 +236,7 @@ async def on_message(message):
         if message.author.server_permissions :
             if is_moderator(message.author) :
                 #do a ban
-                args = message.content[8:].split(" ")
+                args = message.content[7:].split(" ")
                 id = args[0].replace("<","").replace("@","").replace(">","").replace("!","")
                 args.pop(0)
                 reason = ""
@@ -242,7 +246,32 @@ async def on_message(message):
                 embed, case_number = ban_user(message.server, message.author.id, id, reason)
                 await client.send_message(message.channel, "*User {} has been ban...*".format(id))
                 msg = await client.send_message(warn_channel, embed=embed)
-                configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = msg.id
+                configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!set_reason") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                #do a edit
+                args = message.content[14:].split(" ")
+                if len(args) > 0 :
+                    #id = args[0].replace("<","").replace("@","").replace(">","").replace("!","")
+                    case_number = int(args[0].strip())
+                    args.pop(0)
+                    reason = ""
+                    for arg in args :
+                        reason += arg + " "
+                    server = message.server
+                    warn_channel = server.get_channel(str(configs[server.id]["Mod"]["TextChannel"]))
+                    msgid = configs[server.id]["Mod"]["Cases"][case_number-1]["MessageId"]
+                    msg = await client.get_message(warn_channel, str(msgid))
+                    embed = set_reason(server, warn_channel, case_number, msgid, msg , reason)
+                    await client.edit_message(msg, embed=embed)
+                    save_config(server)
+                else :
+                    await client.send_message(message.channel, generate_error("304"))
             else :
                 await client.send_message(message.channel, generate_error("302"))
         else :

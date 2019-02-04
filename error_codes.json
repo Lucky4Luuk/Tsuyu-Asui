@@ -8,5 +8,6 @@
 
   "301": "Unknown command!",
   "302": "You don't have the permission to run this command (Admin Command)",
-  "303": "Cannot run this command in PM (Admin Command)"
+  "303": "Cannot run this command in PM (Admin Command)",
+  "304": "Please specify the case number (Admin Command)"
 }
