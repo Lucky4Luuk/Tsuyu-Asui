@@ -2,6 +2,10 @@ import discord
 import asyncio
 import json
 import random
+import datetime
+
+#custom imports
+import minesweeper
 
 f = open("token.txt")
 TOKEN = f.read().strip()
@@ -11,6 +15,12 @@ ERROR_CODES = json.load(f)
 f.close()
 
 LUUK_ID = "183315569745985545"
+
+#colors
+FROG_GREEN = 0x00b700
+HONEY_ORANGE = 0xfa6912
+BEE_YELLOW = 0xfadd16
+FIRE_RED = 0xff0000
 
 configs = {}
 
@@ -28,7 +38,7 @@ def import_config(server, retry=True) :
     except Exception as e :
         print(e)
         #create a new config file
-        f = open("empty-config.json", encoding="latin-1")
+        f = open("empty_config.json", encoding="latin-1")
         data = f.read()
         f.close()
         f = open("{}-config.json".format(server.id), "a+", encoding="latin-1")
@@ -47,7 +57,7 @@ def save_config(server) :
         f = open("{}-config.json".format(server.id), "w+", encoding="latin-1")
         f.seek(0)
         f.truncate()
-        f.write(json.dumps(configs[server.id]))
+        f.write(json.dumps(configs[server.id], indent="  "))
         f.close()
     except Exception as e :
         print(e)
@@ -57,12 +67,83 @@ def save_all_configs() :
         save_config(server)
 
 def get_config_embed() :
-    embed=discord.Embed(title="Config", description="", color=0x00b700)
+    embed=discord.Embed(title="Config", description="", color=FROG_GREEN)
     #embed.set_footer(text="Page {}".format(page_number))
     return embed
 
-def warn_user(modid, id, reason, messageid) :
-    print("yeet")
+def warn_user(server, modid, id, reason) :
+    #print("yeet")
+    if reason.strip() == "" :
+        reason = "Please set a reason using ta!set_reason <case_number> <reason> <:TsuSmileBot:541997306413580288>"
+    case_number = len(configs[server.id]["Mod"]["Cases"])+1
+    case = {
+        "ModId":int(modid),
+        "UserId":int(id),
+        "Reason":reason,
+        "CaseNumber":case_number,
+        "MessageId":0,
+        "CaseType":6
+    }
+    member = server.get_member(id)
+    moderator = server.get_member(modid)
+    configs[server.id]["Mod"]["Cases"].append(case)
+    timestamp = datetime.datetime.now()
+    embed = discord.Embed(color=BEE_YELLOW)
+    embed.set_author(name="Case #{case_number} | Warning | {name}#{tag}".format(case_number=case_number, name=member.name, tag=member.discriminator), icon_url=member.avatar_url)
+    embed.add_field(name="User", value=member.mention, inline=True)
+    embed.add_field(name="Moderator", value=moderator.mention, inline=True)
+    embed.add_field(name="Reason", value=reason, inline=False)
+    embed.set_footer(text="ID: {} • {}".format(id, timestamp.strftime("%c")))
+    #save_config(server)
+    return embed, case_number
+
+def ban_user(server, modid, id, reason) :
+    #print("yeet")
+    if reason.strip() == "" :
+        reason = "Please set a reason using ta!set_reason <case_number> <reason> <:TsuSmileBot:541997306413580288>"
+    case_number = len(configs[server.id]["Mod"]["Cases"])+1
+    case = {
+        "ModId":int(modid),
+        "UserId":int(id),
+        "Reason":reason,
+        "CaseNumber":case_number,
+        "MessageId":0,
+        "CaseType":1
+    }
+    member = server.get_member(id)
+    moderator = server.get_member(modid)
+    configs[server.id]["Mod"]["Cases"].append(case)
+    timestamp = datetime.datetime.now()
+    embed = discord.Embed(color=FIRE_RED)
+    embed.set_author(name="Case #{case_number} | Ban | {name}#{tag}".format(case_number=case_number, name=member.name, tag=member.discriminator), icon_url=member.avatar_url)
+    embed.add_field(name="User", value=member.mention, inline=True)
+    embed.add_field(name="Moderator", value=moderator.mention, inline=True)
+    embed.add_field(name="Reason", value=reason, inline=False)
+    embed.set_footer(text="ID: {} • {}".format(id, timestamp.strftime("%c")))
+    #save_config(server)
+    return embed, case_number
+
+def set_reason(server, case_number, reason) :
+    if reason.strip() == "" :
+        reason = "Please set a reason using ta!set_reason <case_number> <reason> <:TsuSmileBot:541997306413580288>"
+    case = configs[server.id]["Mod"]["Cases"][case_number-1]
+    id = case["UserId"]
+    modid = case["ModId"]
+
+    member = server.get_member(id)
+    moderator = server.get_member(modid)
+    configs[server.id]["Mod"]["Cases"].append(case)
+    timestamp = datetime.datetime.now()
+    embed = discord.Embed(color=FIRE_RED)
+    embed.set_author(name="Case #{case_number} | Ban | {name}#{tag}".format(case_number=case_number, name=member.name, tag=member.discriminator), icon_url=member.avatar_url)
+    embed.add_field(name="User", value=member.mention, inline=True)
+    embed.add_field(name="Moderator", value=moderator.mention, inline=True)
+    embed.add_field(name="Reason", value=reason, inline=False)
+    embed.set_footer(text="ID: {} • {} (edited)".format(id, timestamp.strftime("%c")))
+    return case["MessageId"]
+
+def is_moderator(member) :
+    return member.server_permissions.administrator or member.server_permissions.kick_members or member.server_permissions.ban_members
 
 @client.event
 async def on_ready():
@@ -129,19 +210,64 @@ async def on_message(message):
 
     elif message.content.startswith("ta!warn") :
         if message.author.server_permissions :
-            if message.author.server_permissions.administrator :
+            if is_moderator(message.author) :
                 #do a warn
                 args = message.content[8:].split(" ")
-                id = args[0].replace("<","").replace("@","").replace(">","")
+                id = args[0].replace("<","").replace("@","").replace(">","").replace("!","")
                 args.pop(0)
                 reason = ""
                 for arg in args :
                     reason += arg + " "
-                warn_user(message.server.get_member(id), reason)
+                warn_channel = message.server.get_channel(str(configs[message.server.id]["Mod"]["TextChannel"]))
+                embed, case_number = warn_user(message.server, message.author.id, id, reason)
+                await client.send_message(message.channel, "*User {} has been warned...*".format(id))
+                msg = await client.send_message(warn_channel, embed=embed)
+                configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = msg.id
+                save_config(message.server)
             else :
                 await client.send_message(message.channel, generate_error("302"))
         else :
             await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!ban") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                #do a ban
+                args = message.content[8:].split(" ")
+                id = args[0].replace("<","").replace("@","").replace(">","").replace("!","")
+                args.pop(0)
+                reason = ""
+                for arg in args :
+                    reason += arg + " "
+                warn_channel = message.server.get_channel(str(configs[message.server.id]["Mod"]["TextChannel"]))
+                embed, case_number = ban_user(message.server, message.author.id, id, reason)
+                await client.send_message(message.channel, "*User {} has been ban...*".format(id))
+                msg = await client.send_message(warn_channel, embed=embed)
+                configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = msg.id
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
+    #elif message.content.startswith("ta!minesweeper") :
+    #    args = message.content[15:].split(" ")
+    #    if len(args) > 0 and not (len(args) == 1 and args[0] == '') :
+    #        if "x" in args[0] :
+    #            size = args[0].split("x")
+    #            successful = False
+    #            try :
+    #                size_x = int(size[0])
+    #                size_y = int(size[1])
+    #                num_of_mines = int(args[1])
+    #                successful = True
+    #            except :
+    #                await client.send_message(message.channel, generate_error("104"))
+    #            if successful :
+    #                lines = minesweeper.create_board(size_x, size_y, num_of_mines)
+    #                for line in lines :
+    #                    await client.send_message(message.channel, line)
+    #        else :
+    #            await client.send_message(message.channel, generate_error("102"))
+    #    else :
+    #        await client.send_message(message.channel, generate_error("103"))
 
     elif message.content.startswith("ta!") :
         await client.send_message(message.channel, generate_error("301"))

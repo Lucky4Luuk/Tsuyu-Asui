@@ -1,5 +1,8 @@
 {
   "101": "Please specify at least 1 argument (LMGTFY)",
+  "102": "The size should be in the format <width>x<height>, so 10x10 (Mine Sweeper)",
+  "103": "Please specify the size and the number of mines in the format ta!minesweeper <width>x<height> <num_of_mines> (Mine Sweeper)",
+  "104": "Please ensure that the width, height and number of mines is given as a number (Mine Sweeper)",
 
   "201": "Cannot run this command in PM (Reload Current Config File)",
 
