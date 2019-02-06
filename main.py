@@ -218,19 +218,21 @@ async def on_member_join(member):
     joinmessages = configs[member.server.id]["JoinMessages"]
     #print(member.server)
     #print(member.server.get_channel(joinchannel))
-    if id in configs[member.server.id]["Profiles"] :
-        configs[member.server.id]["Profiles"][member.id]["Warnings"] += 1
-    else :
+    #if id in configs[member.server.id]["Profiles"] :
+        #configs[member.server.id]["Profiles"][member.id]
+    #else :
+    if not (id in configs[member.server.id]["Profiles"]) :
         configs[member.server.id]["Profiles"][member.id] = {
             "DailyReward": None,
             "IsBlacklisted": False,
             #"LastMessage": "2018-07-03T23:25:37.5596571",
-            "Warnings": 1,
+            "Warnings": 0,
             "Credits": 0,
             "Commands": {},
             "DailyStreak": 0,
             "ChatXP": 0
         }
+
     await client.send_message(member.server.get_channel(joinchannel), random.choice(joinmessages).format(user=member.mention, guild=member.server))
 
 @client.event
@@ -292,19 +294,13 @@ async def on_message(message):
 
     elif message.content.startswith("ta!github") :
         await client.send_message(message.channel, "If you are interested in my code, you can always find a semi up-to-date version of the code on Github!\nhttps://github.com/Lucky4Luuk/Tsuyu-Asui Have fun <:TsuSmileBot:541997306413580288>")
-    #elif message.content.startswith("ta!crab") :
-    #    args = message.content.split("ta!crab")[1].lstrip().rstrip().split(" ")
-    #    result = generate_error("101")
-    #    if len(args) > 0 and not (len(args) == 1 and args[0] == '') :
-    #        arg_len = 0
-    #        for arg in args :
-    #            arg_len += len(arg)
-    #        result = "🦀{}🦀\n".format(args[0].ljust((arg_len - len(args[0]))*2)) + "-"*arg_len*2 + "\n🦀"
-    #        args.pop(0)
-    #        for arg in args :
-    #            result += arg+" "
-    #        result += "🦀"
-    #    await client.send_message(message.channel, result)
+    elif message.content.startswith("ta!invite") :
+        await client.send_message(message.channel, "I have sent you the invite link in PM <a:TsuDanceBot:542450965463433226>")
+        await client.send_message(message.author, "Here you go <:TsuSmileBot:541997306413580288>\nhttps://discordapp.com/api/oauth2/authorize?client_id=515859822441136130&permissions=8&scope=bot\nFeel free to join the Discord server (ta!discord) for support and update notifications!")
+    elif message.content.startswith("ta!discord") :
+        await client.send_message(message.channel, "I have sent you the invite link in PM <a:TsuDanceBot:542450965463433226>")
+        await client.send_message(message.author, "Here you go <:TsuSmilebot:541997306413580288>\nhttps://discord.gg/He9ZcwR")
+
     elif message.content.startswith("ta!admin") :
         if message.author.server_permissions :
             if message.author.server_permissions.administrator :
