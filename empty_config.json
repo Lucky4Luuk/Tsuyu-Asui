@@ -3,8 +3,10 @@
   "Prefix": "ta!",
   "IsConfigured": false,
   "JoinMessages": [
-    "Welcome {user} to {guild}. Make sure to read <#380845182649630721> and <#446795056775561237> for information about the server!"
+    "Welcome {user} to {guild}."
   ],
+  "BanMessage": "",
+  "KickMessage": "",
   "LeaveMessages": [],
   "SelfRoles": [
     446385091392831488,

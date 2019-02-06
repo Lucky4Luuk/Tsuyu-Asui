@@ -88,9 +88,19 @@ def warn_user(server, modid, id, reason) :
         "MessageId":0,
         "CaseType":6
     }
-    configs[server.id]["Profiles"][id]["Warnings"] += 1
-    if configs[server.id]["Profiles"][id]["Warnings"] > configs[server.id]["Mod"]["MaxWarnings"] :
-        print("this guy should be kicked")
+    if id in configs[server.id]["Profiles"] :
+        configs[server.id]["Profiles"][id]["Warnings"] += 1
+    else :
+        configs[server.id]["Profiles"][id] = {
+            "DailyReward": None,
+            "IsBlacklisted": False,
+            #"LastMessage": "2018-07-03T23:25:37.5596571",
+            "Warnings": 1,
+            "Credits": 0,
+            "Commands": {},
+            "DailyStreak": 0,
+            "ChatXP": 0
+        }
     member = server.get_member(id)
     moderator = server.get_member(modid)
     configs[server.id]["Mod"]["Cases"].append(case)
@@ -101,10 +111,15 @@ def warn_user(server, modid, id, reason) :
     embed.add_field(name="Moderator", value=moderator.mention, inline=True)
     embed.add_field(name="Reason", value=reason, inline=False)
     embed.set_footer(text="ID: {} • {}".format(id, timestamp.strftime("%c")))
+    got_kicked = False
+    if configs[server.id]["Profiles"][id]["Warnings"] > configs[server.id]["Mod"]["MaxWarnings"] :
+        #print("this guy should be kicked")
+        embed, tmp = kick_user(server, modid, id, reason, from_warn=True)
+        got_kicked = True
     #save_config(server)
-    return embed, case_number
+    return embed, case_number, got_kicked
 
-def kick_user(server, modid, id, reason) :
+def kick_user(server, modid, id, reason, from_warn=False) :
     #print("yeet")
     if reason.strip() == "" :
         reason = "Please set a reason using ta!set_reason <case_number> <reason> <:TsuSmileBot:541997306413580288>"
@@ -117,9 +132,12 @@ def kick_user(server, modid, id, reason) :
         "MessageId":0,
         "CaseType":2
     }
+    configs[server.id]["Profiles"][id]["Warnings"] += 1
     member = server.get_member(id)
     moderator = server.get_member(modid)
-    configs[server.id]["Mod"]["Cases"].append(case)
+    if from_warn == False :
+        configs[server.id]["Mod"]["Cases"].append(case)
+        case_number -= 1
     timestamp = datetime.datetime.now()
     embed = discord.Embed(color=WARN_COLOR)
     embed.set_author(name="Case #{case_number} | Kick | {name}#{tag}".format(case_number=case_number, name=member.name, tag=member.discriminator), icon_url=member.avatar_url)
@@ -196,6 +214,19 @@ async def on_member_join(member):
     joinmessages = configs[member.server.id]["JoinMessages"]
     #print(member.server)
     #print(member.server.get_channel(joinchannel))
+    if id in configs[member.server.id]["Profiles"] :
+        configs[member.server.id]["Profiles"][member.id]["Warnings"] += 1
+    else :
+        configs[member.server.id]["Profiles"][member.id] = {
+            "DailyReward": None,
+            "IsBlacklisted": False,
+            #"LastMessage": "2018-07-03T23:25:37.5596571",
+            "Warnings": 1,
+            "Credits": 0,
+            "Commands": {},
+            "DailyStreak": 0,
+            "ChatXP": 0
+        }
     await client.send_message(member.server.get_channel(joinchannel), random.choice(joinmessages).format(user=member.mention, guild=member.server))
 
 @client.event
@@ -258,8 +289,12 @@ async def on_message(message):
                     for arg in args :
                         reason += arg + " "
                     warn_channel = message.server.get_channel(str(configs[message.server.id]["Mod"]["TextChannel"]))
-                    embed, case_number = warn_user(message.server, message.author.id, id, reason)
-                    await client.send_message(message.channel, "*User {} has been warned...*".format(member.name))
+                    embed, case_number, got_kicked = warn_user(message.server, message.author.id, id, reason)
+                    if got_kicked :
+                        await client.send_message(message.channel, "*User {} has been kicked...*".format(member.name))
+                        await client.kick(member)
+                    else :
+                        await client.send_message(message.channel, "*User {} has been warned...*".format(member.name))
                     msg = await client.send_message(warn_channel, embed=embed)
                     configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
                     save_config(message.server)
@@ -364,6 +399,56 @@ async def on_message(message):
                 configs[message.server.id]["BanMessage"] = reason
                 await client.send_message(message.channel, "Your new ban message is now '{}'".format(reason.format(user=message.author, guild=message.server.name)))
                 save_config(message.server)
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!set_max_warns") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                num = message.content[17:].strip()
+                try :
+                    num = int(num)
+                    configs[message.server.id]["Mod"]["MaxWarnings"] = num
+                    await client.send_message(message.channel, "The maximum amount of warnings before a kick occurs is now '{}'".format(num))
+                    save_config(message.server)
+                except Exception as e :
+                    await client.send_message(message.channel, generate_error("306"))
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!reset_warns") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                id = message.content[15:].strip().replace("<", "").replace(">", "").replace("!", "").replace("@", "")
+                if id != "" and id in configs[message.server.id]["Profiles"] :
+                    member = message.server.get_member(id)
+                    configs[message.server.id]["Profiles"][str(id)]["Warnings"] = 0
+                    await client.send_message(message.channel, "{}'s warnings have been reset!".format(member.mention))
+                    save_config(message.server)
+                else :
+                    await client.send_message(message.channel, generate_error("307"))
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!get_warns") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                id = message.content[13:].strip().replace("<", "").replace(">", "").replace("!", "").replace("@", "")
+                if id != "" and id in configs[message.server.id]["Profiles"] :
+                    member = message.server.get_member(id)
+                    warnings = int(configs[message.server.id]["Profiles"][str(id)]["Warnings"]) #probably not needed to cast to int, but im tired so i cannot think straight lol
+                    if warnings == 0 :
+                        await client.send_message(message.channel, "{} has {} warnings! <a:TsuDanceBot:542450965463433226>".format(member.mention, warnings))
+                    elif warnings == 1 :
+                        await client.send_message(message.channel, "{} has {} warnings!".format(member.mention, warnings))
+                    else :
+                        await client.send_message(message.channel, "{} has {} warnings!".format(member.mention, warnings))
+                    #save_config(message.server)
+                else :
+                    await client.send_message(message.channel, "Either the ID is incorrect, or this person has never joined this server. You can assume they have 0 warnings <:TsuSmileBot:541997306413580288>")
             else :
                 await client.send_message(message.channel, generate_error("302"))
         else :
