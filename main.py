@@ -252,6 +252,22 @@ async def on_message(message):
                 result += arg + "+"
             result = result[:-1] + ">"
         await client.send_message(message.channel, result)
+    elif message.content == "ta!neato" :
+        await client.send_message(message.channel, """||```
+███╗   ██╗███████╗ █████╗ ████████╗ ██████╗
+████╗  ██║██╔════╝██╔══██╗╚══██╔══╝██╔═══██╗
+██╔██╗ ██║█████╗  ███████║   ██║   ██║   ██║
+██║╚██╗██║██╔══╝  ██╔══██║   ██║   ██║   ██║
+██║ ╚████║███████╗██║  ██║   ██║   ╚██████╔╝
+╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ```||""")
+    elif message.content == "ta!epic" :
+        await client.send_message(message.channel, """||```
+███████╗██████╗ ██╗ ██████╗
+██╔════╝██╔══██╗██║██╔════╝
+█████╗  ██████╔╝██║██║
+██╔══╝  ██╔═══╝ ██║██║
+███████╗██║     ██║╚██████╗
+╚══════╝╚═╝     ╚═╝ ╚═════╝```||""")
     elif message.content.startswith("ta!help categories") or message.content.startswith("ta!help category") :
         embed = discord.Embed(color=HELP_COLOR)
         embed.set_author(name=HELP_DATA["title"], icon_url=HELP_DATA["icon_url"])
@@ -273,6 +289,9 @@ async def on_message(message):
             embed.add_field(name=line["name"], value=line["value"], inline=line["inline"])
         embed.set_footer(text=" • {}".format(datetime.datetime.now().strftime("%c")))
         await client.send_message(message.channel, embed=embed)
+
+    elif message.content.startswith("ta!github") :
+        await client.send_message(message.channel, "If you are interested in my code, you can always find a semi up-to-date version of the code on Github!\nhttps://github.com/Lucky4Luuk/Tsuyu-Asui Have fun <:TsuSmileBot:541997306413580288>")
     #elif message.content.startswith("ta!crab") :
     #    args = message.content.split("ta!crab")[1].lstrip().rstrip().split(" ")
     #    result = generate_error("101")
