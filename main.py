@@ -13,6 +13,9 @@ f.close()
 f = open("error_codes.json")
 ERROR_CODES = json.load(f)
 f.close()
+f = open("help.json")
+HELP_DATA = json.load(f)
+f.close()
 
 LUUK_ID = "183315569745985545"
 
@@ -25,6 +28,7 @@ SKY_BLUE = 0xb9e3e6
 
 WARN_COLOR = SKY_BLUE
 BAN_COLOR = FIRE_RED
+HELP_COLOR = FROG_GREEN
 
 configs = {}
 
@@ -248,6 +252,27 @@ async def on_message(message):
                 result += arg + "+"
             result = result[:-1] + ">"
         await client.send_message(message.channel, result)
+    elif message.content.startswith("ta!help categories") or message.content.startswith("ta!help category") :
+        embed = discord.Embed(color=HELP_COLOR)
+        embed.set_author(name=HELP_DATA["title"], icon_url=HELP_DATA["icon_url"])
+        for line in HELP_DATA["category_lines"] :
+            embed.add_field(name=line["name"], value=line["value"], inline=line["inline"])
+        embed.set_footer(text=" • {}".format(datetime.datetime.now().strftime("%c")))
+        await client.send_message(message.channel, embed=embed)
+    elif message.content.startswith("ta!help admin") :
+        embed = discord.Embed(color=HELP_COLOR)
+        embed.set_author(name=HELP_DATA["title"], icon_url=HELP_DATA["icon_url"])
+        for line in HELP_DATA["admin_lines"] :
+            embed.add_field(name=line["name"], value=line["value"], inline=line["inline"])
+        embed.set_footer(text=" • {}".format(datetime.datetime.now().strftime("%c")))
+        await client.send_message(message.channel, embed=embed)
+    elif message.content.startswith("ta!help") or message.content.startswith("ta!help core") :
+        embed = discord.Embed(color=HELP_COLOR)
+        embed.set_author(name=HELP_DATA["title"], icon_url=HELP_DATA["icon_url"])
+        for line in HELP_DATA["core_lines"] :
+            embed.add_field(name=line["name"], value=line["value"], inline=line["inline"])
+        embed.set_footer(text=" • {}".format(datetime.datetime.now().strftime("%c")))
+        await client.send_message(message.channel, embed=embed)
     #elif message.content.startswith("ta!crab") :
     #    args = message.content.split("ta!crab")[1].lstrip().rstrip().split(" ")
     #    result = generate_error("101")
