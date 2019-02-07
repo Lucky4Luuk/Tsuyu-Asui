@@ -443,6 +443,19 @@ async def on_message(message):
                 await client.send_message(message.channel, generate_error("302"))
         else :
             await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!set_warning_channel") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                #do a edit
+                channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
+                server = message.server
+                configs[server.id]["Mod"]["TextChannel"] = channel_id
+                await client.send_message(message.channel, "The warning channel has been set!\nChannel: {} - ID: {}".format(server.get_channel(channel_id).mention, channel_id))
+                save_config(server)
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
     elif message.content.startswith("ta!set_max_warns") :
         if message.author.server_permissions :
             if is_moderator(message.author) :
