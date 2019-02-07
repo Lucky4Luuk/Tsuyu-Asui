@@ -214,6 +214,7 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
+    global HELP_DATA, configs
     joinchannel = str(configs[member.server.id]["JoinChannel"]).strip()
     joinmessages = configs[member.server.id]["JoinMessages"]
     #print(member.server)
@@ -542,13 +543,15 @@ async def on_message(message):
     #    else :
     #        await client.send_message(message.channel, generate_error("103"))
 
-    elif message.content.startswith("ta!") :
-        await client.send_message(message.channel, generate_error("301"))
-
     elif message.author.id == LUUK_ID :
         if message.content.startswith("ta!reload_error_codes") :
             f = open("error_codes.json")
             ERROR_CODES = json.load(f)
+            f.close()
+            await client.send_message(message.channel, "No problem <:TsuAdorableBot:541315335169507345>")
+        elif message.content.startswith("ta!reload_help") :
+            f = open("help.json")
+            HELP_DATA = json.load(f)
             f.close()
             await client.send_message(message.channel, "No problem <:TsuAdorableBot:541315335169507345>")
         elif message.content.startswith("ta!reload_config_file_current") :
@@ -562,5 +565,8 @@ async def on_message(message):
 
         elif message.content.startswith("ta!") :
             await client.send_message(message.channel, generate_error("301"))
+
+    elif message.content.startswith("ta!") :
+        await client.send_message(message.channel, generate_error("301"))
 
 client.run(TOKEN)
