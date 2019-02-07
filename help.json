@@ -20,6 +20,6 @@
     {"name": "ta!ban <id/mention>", "value": " - *Bans the specified user. DM's the user in question a message, configured using ta!set_ban_message*", "inline": false},
     {"name": "ta!set_kick_message <message>", "value": " - *Sets the message that gets sent to anyone kicked using the bot.*", "inline": false},
     {"name": "ta!set_ban_message <message>", "value": " - *Same as ta!set_kick_message, but for banning people*", "inline": false},
-    {"name": "ta!set_warning_channel <id>", "value": " - *Sets the channel that warnings are logged to!*", "inline": false}
+    {"name": "ta!set_warning_channel <id/channel-mention>", "value": " - *Sets the channel that warnings are logged to!*", "inline": false}
   ]
 }
