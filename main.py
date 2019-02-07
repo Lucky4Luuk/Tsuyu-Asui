@@ -549,11 +549,11 @@ async def on_message(message):
             ERROR_CODES = json.load(f)
             f.close()
             await client.send_message(message.channel, "No problem <:TsuAdorableBot:541315335169507345>")
-        elif message.content.startswith("ta!reload_help") :
-            f = open("help.json")
-            HELP_DATA = json.load(f)
-            f.close()
-            await client.send_message(message.channel, "No problem <:TsuAdorableBot:541315335169507345>")
+        #elif message.content.startswith("ta!reload_help") :
+        #    f = open("help.json")
+        #    HELP_DATA = json.load(f)
+        #    f.close()
+        #    await client.send_message(message.channel, "No problem <:TsuAdorableBot:541315335169507345>")
         elif message.content.startswith("ta!reload_config_file_current") :
             if message.server :
                 import_config(message.server.id)
