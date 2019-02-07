@@ -214,7 +214,6 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
-    global HELP_DATA, configs
     joinchannel = str(configs[member.server.id]["JoinChannel"]).strip()
     joinmessages = configs[member.server.id]["JoinMessages"]
     #print(member.server)
