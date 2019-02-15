@@ -3,13 +3,20 @@ import asyncio
 import json
 import random
 import datetime
+import os
 
 #custom imports
 import minesweeper
 
+if not os.path.isfile("token.txt"):
+    print("token.txt was not found, create it and put your token in there")
+    exit()
 f = open("token.txt")
 TOKEN = f.read().strip()
 f.close()
+if TOKEN == "":
+    print("token.txt was empty, please put your token in there")
+    exit()
 f = open("error_codes.json")
 ERROR_CODES = json.load(f)
 f.close()
