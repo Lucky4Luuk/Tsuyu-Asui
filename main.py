@@ -250,7 +250,7 @@ async def on_message(message):
         f.write("{}: {}\n".format(message.author.name, message.content))
         f.close()
 
-    if message.content == message.server.me.mention :
+    elif message.content == message.server.me.mention :
         await client.send_message(message.channel, "Hello! Do you need help with anything? Feel free to use ta!help at any point if you need my help <:TsuComfyBot:541315853149536257>")
 
     if message.content.startswith("ta!lmgtfy") :
