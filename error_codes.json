@@ -12,5 +12,7 @@
   "304": "Please specify the case number (Admin Command)",
   "305": "Cannot run this command on a user with a higher rank than yours (Admin Command)",
   "306": "The argument passed should be a number (Admin Command)",
-  "307": "The ID is either missing or invalid (Admin Command)"
+  "307": "The ID is either missing or invalid (Admin Command)",
+
+  "501": "Cannot find the code (Interpreters)"
 }

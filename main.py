@@ -6,6 +6,7 @@ import datetime
 
 #custom imports
 import minesweeper
+import interpreters
 
 f = open("token.txt")
 TOKEN = f.read().strip()
@@ -533,6 +534,15 @@ async def on_message(message):
                 await client.send_message(message.channel, generate_error("302"))
         else :
             await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!brainfuck") :
+        code = message.content[13:].replace("```", "").strip()
+        if code != "" :
+            result = interpreters.brainfuck_evaluate(code)
+            await client.send_message(message.channel, "```OUTPUT:\n{}```".format(result))
+        else :
+            await client.send_message(message.channel, generate_error("501"))
+    elif message.content == "ta!imlonely" :
+        await client.send_message(message.channel, "Hi lonely I'm dad")
     #elif message.content.startswith("ta!minesweeper") :
     #    args = message.content[15:].split(" ")
     #    if len(args) > 0 and not (len(args) == 1 and args[0] == '') :
