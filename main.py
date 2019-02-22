@@ -504,7 +504,7 @@ async def on_message(message):
                     if warnings == 0 :
                         await client.send_message(message.channel, "{} has {} warnings! <a:TsuDanceBot:542450965463433226>".format(member.mention, warnings))
                     elif warnings == 1 :
-                        await client.send_message(message.channel, "{} has {} warnings!".format(member.mention, warnings))
+                        await client.send_message(message.channel, "{} has {} warning!".format(member.mention, warnings))
                     else :
                         await client.send_message(message.channel, "{} has {} warnings!".format(member.mention, warnings))
                     #save_config(message.server)
