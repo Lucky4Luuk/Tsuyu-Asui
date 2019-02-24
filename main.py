@@ -514,6 +514,21 @@ async def on_message(message):
                 await client.send_message(message.channel, generate_error("302"))
         else :
             await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!purge") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                num = message.content[9:].strip()
+                if num != "" and num.isdigit() :
+                    #purge
+                    num = int(num)
+                    await client.purge_from(message.channel, limit=num+1)
+                    await client.send_message(message.channel, "*Purged {} messages...*".format(num))
+                else :
+                    await client.send_message(message.channel, generate_error("306"))
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
     elif message.content.startswith("ta!save_config") :
         if message.author.server_permissions :
             if is_moderator(message.author) :
