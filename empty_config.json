@@ -1,5 +1,5 @@
 {
-  "Id": "380467661575815169",
+  "Id": "",
   "Prefix": "ta!",
   "IsConfigured": false,
   "JoinMessages": [
@@ -38,7 +38,7 @@
   },
   "Tags": [],
   "AFK": {},
-  "JoinChannel": 380467662083588107,
+  "JoinChannel": 0,
   "LeaveChannel": 0,
   "Locale": 1,
   "GuildActions": {

@@ -38,6 +38,8 @@ WARN_COLOR = SKY_BLUE
 BAN_COLOR = FIRE_RED
 HELP_COLOR = FROG_GREEN
 
+NEKOS_LIFE = "https://nekos.life/api/v2/img/{}"
+
 configs = {}
 
 client = discord.Client()
@@ -459,6 +461,19 @@ async def on_message(message):
                 server = message.server
                 configs[server.id]["Mod"]["TextChannel"] = channel_id
                 await client.send_message(message.channel, "The warning channel has been set!\nChannel: {} - ID: {}".format(server.get_channel(channel_id).mention, channel_id))
+                save_config(server)
+            else :
+                await client.send_message(message.channel, generate_error("302"))
+        else :
+            await client.send_message(message.channel, generate_error("303"))
+    elif message.content.startswith("ta!set_welcome_channel") :
+        if message.author.server_permissions :
+            if is_moderator(message.author) :
+                #do a edit
+                channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
+                server = message.server
+                configs[server.id]["JoinChannel"] = channel_id
+                await client.send_message(message.channel, "The welcome channel has been set!\nChannel: {} - ID: {}".format(server.get_channel(channel_id).mention, channel_id))
                 save_config(server)
             else :
                 await client.send_message(message.channel, generate_error("302"))
