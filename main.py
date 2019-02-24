@@ -122,7 +122,7 @@ def warn_user(server, modid, id, reason) :
     embed.add_field(name="User", value=member.mention, inline=True)
     embed.add_field(name="Moderator", value=moderator.mention, inline=True)
     embed.add_field(name="Reason", value=reason, inline=False)
-    embed.set_footer(text="ID: {} • {}".format(id, timestamp.strftime("%c")))
+    embed.set_footer(text="ID: {} • {} • Warning #{}".format(id, timestamp.strftime("%c"), configs[server.id]["Profiles"][id]["Warnings"]))
     got_kicked = False
     if configs[server.id]["Profiles"][id]["Warnings"] > configs[server.id]["Mod"]["MaxWarnings"] :
         #print("this guy should be kicked")
@@ -156,7 +156,7 @@ def kick_user(server, modid, id, reason, from_warn=False) :
     embed.add_field(name="User", value=member.mention, inline=True)
     embed.add_field(name="Moderator", value=moderator.mention, inline=True)
     embed.add_field(name="Reason", value=reason, inline=False)
-    embed.set_footer(text="ID: {} • {}".format(id, timestamp.strftime("%c")))
+    embed.set_footer(text="ID: {} • {} • Warning #{}".format(id, timestamp.strftime("%c"), configs[server.id]["Profiles"][id]["Warnings"]))
     #save_config(server)
     return embed, case_number
 
@@ -182,7 +182,7 @@ def ban_user(server, modid, id, reason) :
     embed.add_field(name="User", value=member.mention, inline=True)
     embed.add_field(name="Moderator", value=moderator.mention, inline=True)
     embed.add_field(name="Reason", value=reason, inline=False)
-    embed.set_footer(text="ID: {} • {}".format(id, timestamp.strftime("%c")))
+    embed.set_footer(text="ID: {} • {} • Warning #{}".format(id, timestamp.strftime("%c"), configs[server.id]["Profiles"][id]["Warnings"]))
     #save_config(server)
     return embed, case_number
 
