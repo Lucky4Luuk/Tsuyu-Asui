@@ -11,7 +11,9 @@
     {"name": "ta!help categories", "value": " - *Shows you all the possible categories for help, including this one!*", "inline": false},
     {"name": "ta!invite", "value": " - *DM's you an invite link for the bot!*", "inline": false},
     {"name": "ta!discord", "value": " - *DM's you an invite link for the bot's Discord server!*", "inline": false},
-    {"name": "ta!github", "value": " - *Gives you your very own link to the bot's Github page!*", "inline": false}
+    {"name": "ta!github", "value": " - *Gives you your very own link to the bot's Github page!*", "inline": false},
+    {"name": "ta!epic", "value": " - *A pretty epic message!*", "inline": false},
+    {"name": "ta!neato", "value": " - *A pretty neato message!*", "inline": false}
   ],
   "admin_lines": [
     {"name": "__**Admin Commands**__", "value": "** **", "inline": false},
@@ -20,6 +22,8 @@
     {"name": "ta!ban <id/mention>", "value": " - *Bans the specified user. DM's the user in question a message, configured using ta!set_ban_message*", "inline": false},
     {"name": "ta!set_kick_message <message>", "value": " - *Sets the message that gets sent to anyone kicked using the bot.*", "inline": false},
     {"name": "ta!set_ban_message <message>", "value": " - *Same as ta!set_kick_message, but for banning people*", "inline": false},
-    {"name": "ta!set_warning_channel <id/channel-mention>", "value": " - *Sets the channel that warnings are logged to!*", "inline": false}
+    {"name": "ta!set_warning_channel <id/channel-mention>", "value": " - *Sets the channel that warnings are logged to!*", "inline": false},
+    {"name": "ta!get_warns <id>", "value": " - *Gets the amount of warnings a person has!*", "inline": false},
+    {"name": "ta!set_max_warns <number>", "value": " - *Sets the amount of warnings a person can have before they get kicked!*", "inline": false}
   ]
 }
