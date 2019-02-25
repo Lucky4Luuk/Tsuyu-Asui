@@ -222,7 +222,14 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    game = discord.Game(name="Currently in {} servers!".format(len(client.servers)))
+    await client.change_status(game=game)
     import_all_configs()
+
+@client.event
+async def on_server_join(server) :
+    game = discord.Game(name="Currently in {} servers!".format(len(client.servers)))
+    await client.change_status(game=game)
 
 @client.event
 async def on_member_join(member):
