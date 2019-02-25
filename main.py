@@ -12,12 +12,14 @@ import interpreters
 if not os.path.isfile("token.txt"):
     print("token.txt was not found, create it and put your token in there")
     exit()
+
 f = open("token.txt")
 TOKEN = f.read().strip()
 f.close()
 if TOKEN == "":
     print("token.txt was empty, please put your token in there")
     exit()
+
 f = open("error_codes.json")
 ERROR_CODES = json.load(f)
 f.close()
@@ -572,7 +574,7 @@ async def on_message(message):
         else :
             await client.send_message(message.channel, generate_error("303"))
     elif message.content.startswith("ta!brainfuck") :
-        code = message.content[13:].replace("```", "").strip()
+        code = message.content[13:].replace("`", "").strip()
         if code != "" :
             result = interpreters.brainfuck_evaluate(code)
             await client.send_message(message.channel, "```OUTPUT:\n{}```".format(result))
@@ -621,6 +623,33 @@ async def on_message(message):
         elif message.content.startswith("ta!save_configs") :
             save_all_configs()
             await client.send_message(message.channel, "No problem <:TsuAdorableBot:541315335169507345>")
+        elif message.content.startswith("ta!eval") :
+            code = message.content[8:].replace("`","")
+            if code != "" :
+                result = eval(code)
+                await client.send_message(message.channel, "```OUTPUT:\n{}```".format(result))
+            else :
+                await client.send_message(message.channel, generate_error("501"))
+        elif message.content.startswith("ta!exec") :
+            code = message.content[8:].replace("`","")
+            if code != "" :
+                result = exec(code)
+                await client.send_message(message.channel, "```OUTPUT:\n[No code output]```")
+            else :
+                await client.send_message(message.channel, generate_error("501"))
+        elif message.content == "ta!shutdown" :
+            await client.send_message(message.channel, "Are you sure? (y/n)")
+            response = await client.wait_for_message(timeout=30, author=message.author)
+            if response.content == "y" :
+                await client.send_message(message.channel, "Okay!")
+                await client.send_message(message.channel, "Saving all configs...")
+                save_all_configs()
+                await client.send_message(message.channel, "All configs saved!")
+                await client.send_message(message.channel, "Logging out... bye!")
+                await client.logout()
+                exit()
+            else :
+                await client.send_message(message.channel, "Staying online.")
 
         elif message.content.startswith("ta!") :
             await client.send_message(message.channel, generate_error("301"))
