@@ -521,7 +521,7 @@ async def on_message(message):
             if is_moderator(message.author) :
                 id = message.content[15:].strip().replace("<", "").replace(">", "").replace("!", "").replace("@", "")
                 if id != "" and id in configs[message.guild.id]["Profiles"] :
-                    member = message.guild.get_member(id)
+                    member = message.guild.get_member(int(id))
                     configs[message.guild.id]["Profiles"][str(id)]["Warnings"] = 0
                     await message.channel.send(content="{}'s warnings have been reset!".format(member.mention))
                     save_config(message.guild)
@@ -536,7 +536,7 @@ async def on_message(message):
             if is_moderator(message.author) :
                 id = message.content[13:].strip().replace("<", "").replace(">", "").replace("!", "").replace("@", "")
                 if id != "" and id in configs[message.guild.id]["Profiles"] :
-                    member = message.guild.get_member(id)
+                    member = message.guild.get_member(int(id))
                     warnings = int(configs[message.guild.id]["Profiles"][str(id)]["Warnings"]) #probably not needed to cast to int, but im tired so i cannot think straight lol
                     if warnings == 0 :
                         await message.channel.send(content="{} has {} warnings! <a:TsuDanceBot:542450965463433226>".format(member.mention, warnings))
