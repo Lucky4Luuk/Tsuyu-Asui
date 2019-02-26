@@ -371,7 +371,7 @@ async def on_message(message):
                     warn_channel = message.server.get_channel(str(configs[message.server.id]["Mod"]["TextChannel"]))
                     embed, case_number = kick_user(message.server, message.author.id, id, reason)
                     await client.send_message(message.channel, "*User {} has been kicked...*".format(member.name))
-                    await client.send_message(member, configs[message.server.id]["KickMessage"].format(guild=server.name, user=member.name))
+                    await client.send_message(member, configs[message.server.id]["KickMessage"].format(guild=message.server.name, user=member.name))
                     msg = await client.send_message(warn_channel, embed=embed)
                     await client.kick(member)
                     configs[message.server.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
