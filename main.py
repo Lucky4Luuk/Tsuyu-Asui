@@ -227,13 +227,13 @@ async def on_ready():
     print(client.user.id)
     print('------')
     game = discord.Game(name="Currently in {} guilds!".format(len(client.guilds)))
-    await client.change_status(game=game)
+    await client.change_presence(activity=game)
     import_all_configs()
 
 @client.event
 async def on_guild_join(guild) :
     game = discord.Game(name="Currently in {} guilds!".format(len(client.guilds)))
-    await client.change_status(game=game)
+    await client.change_presence(activity=game)
 
 @client.event
 async def on_member_join(member):
