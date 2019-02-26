@@ -299,21 +299,21 @@ async def on_message(message):
         for line in HELP_DATA["category_lines"] :
             embed.add_field(name=line["name"], value=line["value"], inline=line["inline"])
         embed.set_footer(text=" • {}".format(datetime.datetime.now().strftime("%c")))
-        await message.channel.send(content=embed=embed)
+        await message.channel.send(embed=embed)
     elif message.content.startswith("ta!help admin") :
         embed = discord.Embed(color=HELP_COLOR)
         embed.set_author(name=HELP_DATA["title"], icon_url=HELP_DATA["icon_url"])
         for line in HELP_DATA["admin_lines"] :
             embed.add_field(name=line["name"], value=line["value"], inline=line["inline"])
         embed.set_footer(text=" • {}".format(datetime.datetime.now().strftime("%c")))
-        await message.channel.send(content=embed=embed)
+        await message.channel.send(embed=embed)
     elif message.content.startswith("ta!help") or message.content.startswith("ta!help core") :
         embed = discord.Embed(color=HELP_COLOR)
         embed.set_author(name=HELP_DATA["title"], icon_url=HELP_DATA["icon_url"])
         for line in HELP_DATA["core_lines"] :
             embed.add_field(name=line["name"], value=line["value"], inline=line["inline"])
         embed.set_footer(text=" • {}".format(datetime.datetime.now().strftime("%c")))
-        await message.channel.send(content=embed=embed)
+        await message.channel.send(embed=embed)
 
     elif message.content.startswith("ta!github") :
         await message.channel.send(content="If you are interested in my code, you can always find a semi up-to-date version of the code on Github!\nhttps://github.com/Lucky4Luuk/Tsuyu-Asui Have fun <:TsuSmileBot:541997306413580288>")
@@ -330,7 +330,7 @@ async def on_message(message):
                 if message.content == "ta!admin" :
                     #msg = await message.channel.send(content=embed=get_config_embed())
                     #res = await client.wait_for_reaction(["⬅", "➡"])
-                    await message.channel.send(content=embed=get_config_embed())
+                    await message.channel.send(embed=get_config_embed()) #TODO: fix pls
                 elif message.content.startswith("ta!admin set_join_message") : #25 chars
                     msg = message.content[26:]
                     await message.channel.send(content="Your join message is now: '{}'".format(msg.format(user=message.author.mention, guild=message.guild)))
@@ -358,7 +358,7 @@ async def on_message(message):
                         await client.kick(member)
                     else :
                         await message.channel.send(content="*User {} has been warned...*".format(member.name))
-                    msg = await client.send_message(warn_channel, embed=embed)
+                    msg = await warn_channel.send(embed=embed)
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
                     save_config(message.guild)
                 else :
@@ -382,9 +382,9 @@ async def on_message(message):
                     warn_channel = message.guild.get_channel(str(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number = kick_user(message.guild, message.author.id, id, reason)
                     await message.channel.send(content="*User {} has been kicked...*".format(member.name))
-                    await client.send_message(member, configs[message.guild.id]["KickMessage"].format(guild=guild.name, user=member.name))
-                    msg = await client.send_message(warn_channel, embed=embed)
-                    await client.kick(member)
+                    await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=guild.name, user=member.name))
+                    msg = await warn_channel.send(embed=embed)
+                    await member.kick()
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
                     save_config(message.guild)
                 else :
@@ -408,9 +408,9 @@ async def on_message(message):
                     warn_channel = message.guild.get_channel(str(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number = ban_user(message.guild, message.author.id, id, reason)
                     await message.channel.send(content="*User {} has been banned...*".format(member.name))
-                    await client.send_message(member, configs[message.guild.id]["BanMessage"].format(guild=message.guild.name, user=member.name))
-                    msg = await client.send_message(warn_channel, embed=embed)
-                    await client.ban(member)
+                    await member.send_message(content=configs[message.guild.id]["BanMessage"].format(guild=message.guild.name, user=member.name))
+                    msg = await warn_channel.send(embed=embed)
+                    await member.ban()
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
                     save_config(message.guild)
                 else :
@@ -616,14 +616,14 @@ async def on_message(message):
     #        await message.channel.send(content=generate_error("103"))
 
     elif message.content.startswith("ta!nsfw") :
-        if message.channel
-        search = message.content[8:]
-        if search != "" and search in NEKOS_NSFW_ENDPOINTS :
-            url = NEKOS_LIFE.format(search)
-            async with aiohttp.ClientSession() as cs:
-                async with cs.get(url) as r:
-                    res = await r.json()
-                    await message.channel.send(content=res["url"])
+        if message.channel.is_nsfw :
+            search = message.content[8:]
+            if search != "" and search in NEKOS_NSFW_ENDPOINTS :
+                url = NEKOS_LIFE.format(search)
+                async with aiohttp.ClientSession() as cs:
+                    async with cs.get(url) as r:
+                        res = await r.json()
+                        await message.channel.send(content=res["url"])
 
     elif message.author.id == LUUK_ID :
         if message.content.startswith("ta!reload_error_codes") :
