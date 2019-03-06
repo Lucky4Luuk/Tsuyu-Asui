@@ -125,34 +125,7 @@ async def on_message(message):
     elif message.content.startswith("ta!kick") :
         await admin.kick(message)
     elif message.content.startswith("ta!ban") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                #do a ban
-                args = message.content[7:].split(" ")
-                id = args[0].replace("<","").replace("@","").replace(">","").replace("!","").strip()
-                if id != "" and id.isdigit() :
-                    member = message.guild.get_member(int(id))
-                    if message.author.top_role.position > member.top_role.position :
-                        args.pop(0)
-                        reason = ""
-                        for arg in args :
-                            reason += arg + " "
-                        warn_channel = message.guild.get_channel(str(configs[message.guild.id]["Mod"]["TextChannel"]))
-                        embed, case_number = ban_user(message.guild, message.author.id, id, reason)
-                        await message.channel.send(content="*User {} has been banned...*".format(member.name))
-                        await member.send_message(content=configs[message.guild.id]["BanMessage"].format(guild=message.guild.name, user=member.name))
-                        msg = await warn_channel.send(embed=embed)
-                        await member.ban()
-                        configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
-                        save_config(message.guild)
-                    else :
-                        await message.channel.send(content=generate_error("305"))
-                else :
-                    await message.channel.send(content=generate_error("307"))
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await admin.ban(message)
     elif message.content.startswith("ta!set_reason") :
         if message.author.guild_permissions :
             if is_moderator(message.author) :
@@ -179,103 +152,19 @@ async def on_message(message):
         else :
             await message.channel.send(content=generate_error("303"))
     elif message.content.startswith("ta!set_kick_message") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                reason = message.content[20:]
-                configs[message.guild.id]["KickMessage"] = reason
-                await message.channel.send(content="Your new kick message is now '{}'".format(reason.format(user=message.author, guild=message.guild.name)))
-                save_config(message.guild)
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await set_kick_message(message)
     elif message.content.startswith("ta!set_ban_message") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                reason = message.content[19:]
-                configs[message.guild.id]["BanMessage"] = reason
-                await message.channel.send(content="Your new ban message is now '{}'".format(reason.format(user=message.author, guild=message.guild.name)))
-                save_config(message.guild)
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await set_ban_message(message)
     elif message.content.startswith("ta!set_warning_channel") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                #do a edit
-                channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
-                guild = message.guild
-                configs[guild.id]["Mod"]["TextChannel"] = channel_id
-                await message.channel.send(content="The warning channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
-                save_config(guild)
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await set_warning_channel(message)
     elif message.content.startswith("ta!set_welcome_channel") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                #do a edit
-                channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
-                guild = message.guild
-                configs[guild.id]["JoinChannel"] = channel_id
-                await message.channel.send(content="The welcome channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
-                save_config(guild)
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await set_welcome_channel(message)
     elif message.content.startswith("ta!set_max_warns") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                num = message.content[17:].strip()
-                try :
-                    num = int(num)
-                    configs[message.guild.id]["Mod"]["MaxWarnings"] = num
-                    await message.channel.send(content="The maximum amount of warnings before a kick occurs is now '{}'".format(num))
-                    save_config(message.guild)
-                except Exception as e :
-                    await message.channel.send(content=generate_error("306"))
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await set_max_warns(message)
     elif message.content.startswith("ta!reset_warns") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                id = message.content[15:].strip().replace("<", "").replace(">", "").replace("!", "").replace("@", "")
-                if id != "" and id in configs[message.guild.id]["Profiles"] :
-                    member = message.guild.get_member(int(id))
-                    configs[message.guild.id]["Profiles"][str(id)]["Warnings"] = 0
-                    await message.channel.send(content="{}'s warnings have been reset!".format(member.mention))
-                    save_config(message.guild)
-                else :
-                    await message.channel.send(content=generate_error("307"))
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await reset_warns(message)
     elif message.content.startswith("ta!get_warns") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                id = message.content[13:].strip().replace("<", "").replace(">", "").replace("!", "").replace("@", "")
-                if id != "" and id in configs[message.guild.id]["Profiles"] :
-                    member = message.guild.get_member(int(id))
-                    warnings = int(configs[message.guild.id]["Profiles"][str(id)]["Warnings"]) #probably not needed to cast to int, but im tired so i cannot think straight lol
-                    if warnings == 0 :
-                        await message.channel.send(content="{} has {} warnings! <a:TsuDanceBot:542450965463433226>".format(member.mention, warnings))
-                    elif warnings == 1 :
-                        await message.channel.send(content="{} has {} warning!".format(member.mention, warnings))
-                    else :
-                        await message.channel.send(content="{} has {} warnings!".format(member.mention, warnings))
-                    #save_config(message.guild)
-                else :
-                    await message.channel.send(content="Either the ID is incorrect, or this person has never joined this guild. You can assume they have 0 warnings <:TsuSmileBot:541997306413580288>")
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await get_warns(message)
     elif message.content.startswith("ta!purge") :
         if message.author.guild_permissions :
             if is_moderator(message.author) :
