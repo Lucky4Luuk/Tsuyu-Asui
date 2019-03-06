@@ -166,47 +166,13 @@ async def on_message(message):
     elif message.content.startswith("ta!get_warns") :
         await get_warns(message)
     elif message.content.startswith("ta!purge") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                num = message.content[9:].strip()
-                if num != "" and num.isdigit() :
-                    #purge
-                    num = int(num)
-                    await message.channel.purge(limit=num+1)
-                    await message.channel.send(content="*Purged {} messages...*".format(num))
-                else :
-                    await message.channel.send(content=generate_error("306"))
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await purge(message)
     elif message.content.startswith("ta!save_config") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                save_config(message.guild)
-                await message.channel.send(content="Your config file has been saved!")
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await save_config(message)
     elif message.content.startswith("ta!reload_config") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                import_config(message.guild)
-                await message.channel.send(content="Your config file has been reloaded!")
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await reload_config(message)
     elif message.content.startswith("ta!export_config") :
-        if message.author.guild_permissions :
-            if is_moderator(message.author) :
-                import_config(message.guild)
-                await client.send_file(message.channel, "{}-config.json".format(message.guild.id), content="Your config file has been reloaded!")
-            else :
-                await message.channel.send(content=generate_error("302"))
-        else :
-            await message.channel.send(content=generate_error("303"))
+        await export_config(message)
     elif message.content.startswith("ta!brainfuck") :
         code = message.content[13:].replace("`", "").strip()
         if code != "" :

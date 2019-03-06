@@ -216,3 +216,49 @@ async def get_warns(message) :
             await message.channel.send(content=generate_error("302"))
     else :
         await message.channel.send(content=generate_error("303"))
+
+async def purge(message) :
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            num = message.content[9:].strip()
+            if num != "" and num.isdigit() :
+                #purge
+                num = int(num)
+                await message.channel.purge(limit=num+1)
+                await message.channel.send(content="*Purged {} messages...*".format(num))
+            else :
+                await message.channel.send(content=generate_error("306"))
+        else :
+            await message.channel.send(content=generate_error("302"))
+    else :
+        await message.channel.send(content=generate_error("303"))
+
+async def save_config(message) :
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            save_config(message.guild)
+            await message.channel.send(content="Your config file has been saved!")
+        else :
+            await message.channel.send(content=generate_error("302"))
+    else :
+        await message.channel.send(content=generate_error("303"))
+
+async def reload_config(message) :
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            import_config(message.guild)
+            await message.channel.send(content="Your config file has been reloaded!")
+        else :
+            await message.channel.send(content=generate_error("302"))
+    else :
+        await message.channel.send(content=generate_error("303"))
+
+async def export_config(message) :
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            import_config(message.guild)
+            await message.channel.send(file="{}-config.json".format(message.guild.id))
+        else :
+            await message.channel.send(content=generate_error("302"))
+    else :
+        await message.channel.send(content=generate_error("303"))
