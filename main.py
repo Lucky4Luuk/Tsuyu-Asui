@@ -55,12 +55,7 @@ async def on_member_join(member):
 
 @client.event
 async def on_message(message):
-    if message.guild == None : #PM
-        f = open("DM_LOGS.txt", "r+")
-        f.write("{}: {}\n".format(message.author.name, message.content))
-        f.close()
-
-    elif message.content == message.guild.me.mention :
+    if message.content == message.guild.me.mention :
         await message.channel.send(content="Hello! Do you need help with anything? Feel free to use ta!help at any point if you need my help <:TsuComfyBot:541315853149536257>")
 
     if message.content.startswith("ta!lmgtfy") :
@@ -72,7 +67,7 @@ async def on_message(message):
                 result += arg + "+"
             result = result[:-1] + ">"
         await message.channel.send(content=result)
-    
+
     elif message.content == "ta!neato" :
         await jokes.neato(message)
     elif message.content == "ta!epic" :
@@ -170,7 +165,9 @@ async def on_message(message):
                 await message.channel.send(content=generate_error("501"))
         elif message.content == "ta!shutdown" :
             await message.channel.send(content="Are you sure? (y/n)")
-            response = await client.wait_for_message(timeout=30, author=message.author)
+            def check(msg) :
+                return msg.author.id == LUUK_ID
+            response = await client.wait_for("message", timeout=30, check=check)
             if response.content == "y" :
                 await message.channel.send(content="Okay!")
                 await message.channel.send(content="Saving all configs...")
