@@ -2,11 +2,18 @@ from globals import *
 import datetime
 import discord
 
+async def update_presence_guild() :
+    text = "Currently in {} guilds!".format(len(client.guilds))
+    if len(client.guilds) == 1 :
+        text = "Currently in 1 guild!" #otherwise it says '1 guilds' and i dont like that >:(
+    game = discord.Game(name=text)
+    await client.change_presence(activity=game)
+
 def generate_error(code) :
     return "ERROR {}: {} <a:TsuTearsBot:541326614143959050>".format(code, ERROR_CODES[code])
 
 def import_config(guild, retry=True) :
-    print("====Loading Config====\nguild Name: {}\nID: {}\n\n".format(guild.name, guild.id))
+    print("====Loading Config====\nGuild Name: {}\nID: {}\n\n".format(guild.name, guild.id))
     try :
         f = open("{}-config.json".format(guild.id), encoding="latin-1")
         configs[guild.id] = json.load(f)

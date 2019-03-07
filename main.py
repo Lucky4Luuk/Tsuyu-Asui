@@ -5,6 +5,7 @@ import random
 import datetime
 import os
 import aiohttp
+import urllib #not actually for doing link stuff, because it's blocking
 
 #custom imports
 from globals import *
@@ -27,8 +28,7 @@ async def on_ready():
 
 @client.event
 async def on_guild_join(guild) :
-    game = discord.Game(name="Currently in {} guilds!".format(len(client.guilds)))
-    await client.change_presence(activity=game)
+    await update_presence_guild()
 
 @client.event
 async def on_member_join(member):
@@ -64,7 +64,7 @@ async def on_message(message):
         if len(args) > 0 and not (len(args) == 1 and args[0] == '') :
             result = "<http://lmgtfy.com/?q="
             for arg in args :
-                result += arg + "+"
+                result += urllib.parse.quote(arg, safe="") + "+"
             result = result[:-1] + ">"
         await message.channel.send(content=result)
 
