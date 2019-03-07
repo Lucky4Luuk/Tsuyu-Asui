@@ -112,6 +112,32 @@ async def ban(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
+async def set_reason(message) :
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            #do a edit
+            args = message.content[14:].split(" ")
+            if len(args) > 0 :
+                #id = args[0].replace("<","").replace("@","").replace(">","").replace("!","")
+                case_number = int(args[0].strip())
+                args.pop(0)
+                reason = ""
+                for arg in args :
+                    reason += arg + " "
+                guild = message.guild
+                warn_channel = guild.get_channel(str(configs[guild.id]["Mod"]["TextChannel"]))
+                msgid = configs[guild.id]["Mod"]["Cases"][case_number-1]["MessageId"]
+                msg = await client.get_message(warn_channel, str(msgid))
+                embed = set_reason(guild, warn_channel, case_number, msgid, msg , reason)
+                await client.edit_message(msg, embed=embed)
+                save_config(guild)
+            else :
+                await message.channel.send(content=generate_error("304"))
+        else :
+            await message.channel.send(content=generate_error("302"))
+    else :
+        await message.channel.send(content=generate_error("303"))
+
 async def set_kick_message(message) :
     if message.author.guild_permissions :
         if is_moderator(message.author) :

@@ -1,3 +1,14 @@
+from globals import *
+from utils import *
+
+async def brainfuck(message) :
+    code = message.content[13:].replace("`", "").strip()
+    if code != "" :
+        result = brainfuck_evaluate(code)
+        await message.channel.send(content="```OUTPUT:\n{}```".format(result))
+    else :
+        await message.channel.send(content=generate_error("501"))
+
 #brainfuck interpreter from: https://github.com/pocmo/Python-Brainfuck/ thank you x)
 
 def brainfuck_evaluate(code):
