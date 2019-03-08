@@ -21,9 +21,9 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
+    print("Guild count: {}!".format(len(client.guilds)))
     print('------')
-    game = discord.Game(name="Currently in {} guilds!".format(len(client.guilds)))
-    await client.change_presence(activity=game)
+    await update_presence_guild()
     import_all_configs()
 
 @client.event
@@ -67,6 +67,13 @@ async def on_message(message):
                 result += urllib.parse.quote(arg, safe="") + "+"
             result = result[:-1] + ">"
         await message.channel.send(content=result)
+    elif message.content.startswith("ta!stats") :
+        embed=discord.Embed()
+        embed.set_author(name="Server Stats")
+        embed.add_field(name="Ping", value="{ping}", inline=True)
+        embed.add_field(name="Guild Count", value="{guild_count}"", inline=True)
+        #embed.add_field(name="help", value="nope", inline=False)
+        await message.channel.send(embed=embed)
 
     elif message.content == "ta!neato" :
         await jokes.neato(message)
