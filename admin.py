@@ -2,22 +2,20 @@ from globals import *
 from utils import *
 import datetime
 
-async def admin(message) :
+@client.command()
+async def admin(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if message.author.guild_permissions.administrator :
-            if message.content == "ta!admin" :
-                #msg = await message.channel.send(content=embed=get_config_embed())
-                #res = await client.wait_for_reaction(["⬅", "➡"])
-                await message.channel.send(embed=get_config_embed()) #TODO: fix pls
-            elif message.content.startswith("ta!admin set_join_message") : #25 chars
-                msg = message.content[26:]
-                await message.channel.send(content="Your join message is now: '{}'".format(msg.format(user=message.author.mention, guild=message.guild)))
+            await message.channel.send(embed=get_config_embed()) #TODO: fix pls
         else :
             await message.channel.send(content=generate_error("302"))
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def warn(message) :
+@client.command()
+async def warn(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             #do a warn
@@ -40,9 +38,9 @@ async def warn(message) :
                     try :
                         msg = await warn_channel.send(embed=embed)
                         configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
-                        save_config(message.guild)
+                        await save_config(message.guild)
                     except Exception :
-                        save_config(message.guild)
+                        await save_config(message.guild)
                 else :
                     await message.channel.send(content=generate_error("305"))
             else :
@@ -52,7 +50,9 @@ async def warn(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def kick(message) :
+@client.command()
+async def kick(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             #do a kick
@@ -82,7 +82,9 @@ async def kick(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def ban(message) :
+@client.command()
+async def ban(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             #do a ban
@@ -112,7 +114,9 @@ async def ban(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def set_reason(message) :
+@client.command()
+async def set_reason(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             #do a edit
@@ -138,7 +142,9 @@ async def set_reason(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def set_kick_message(message) :
+@client.command()
+async def set_kick_message(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             reason = message.content[20:]
@@ -150,7 +156,9 @@ async def set_kick_message(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def set_ban_message(message) :
+@client.command()
+async def set_ban_message(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             reason = message.content[19:]
@@ -162,7 +170,9 @@ async def set_ban_message(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def set_warning_channel(message) :
+@client.command()
+async def set_warning_channel(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             #do a edit
@@ -176,7 +186,9 @@ async def set_warning_channel(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def set_welcome_channel(message) :
+@client.command()
+async def set_welcome_channel(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             #do a edit
@@ -190,7 +202,9 @@ async def set_welcome_channel(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def set_max_warns(message) :
+@client.command()
+async def set_max_warns(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             num = message.content[17:].strip()
@@ -206,7 +220,9 @@ async def set_max_warns(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def reset_warns(message) :
+@client.command()
+async def reset_warns(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             id = message.content[15:].strip().replace("<", "").replace(">", "").replace("!", "").replace("@", "")
@@ -222,7 +238,9 @@ async def reset_warns(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def get_warns(message) :
+@client.command()
+async def get_warns(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             id = message.content[13:].strip().replace("<", "").replace(">", "").replace("!", "").replace("@", "")
@@ -243,7 +261,9 @@ async def get_warns(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def purge(message) :
+@client.command()
+async def purge(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             num = message.content[9:].strip()
@@ -259,7 +279,9 @@ async def purge(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def save_config(message) :
+@client.command()
+async def save_config(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             save_config(message.guild)
@@ -269,7 +291,9 @@ async def save_config(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def reload_config(message) :
+@client.command()
+async def reload_config(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             import_config(message.guild)
@@ -279,7 +303,9 @@ async def reload_config(message) :
     else :
         await message.channel.send(content=generate_error("303"))
 
-async def export_config(message) :
+@client.command()
+async def export_config(ctx) :
+    message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             import_config(message.guild)

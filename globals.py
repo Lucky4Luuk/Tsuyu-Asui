@@ -1,6 +1,7 @@
 import os
 import json
 import discord
+from discord.ext import commands
 import asyncio
 
 if not os.path.isfile("token.txt"):
@@ -41,4 +42,5 @@ f.close()
 
 configs = {}
 
-client = discord.Client()
+#client = discord.Client()
+client = commands.Bot(command_prefix="ta!")
