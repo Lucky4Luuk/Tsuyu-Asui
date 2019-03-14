@@ -7,11 +7,11 @@ async def admin(ctx) :
     message = ctx.message
     if message.author.guild_permissions :
         if message.author.guild_permissions.administrator :
-            await message.channel.send(embed=get_config_embed()) #TODO: fix pls
+            await ctx.send(embed=get_config_embed()) #TODO: fix pls
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def warn(ctx) :
@@ -31,10 +31,10 @@ async def warn(ctx) :
                     warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number, got_kicked = warn_user(message.guild, message.author.id, id, reason)
                     if got_kicked :
-                        await message.channel.send(content="*User {} has been kicked...*".format(member.name))
+                        await ctx.send(content="*User {} has been kicked...*".format(member.name))
                         await client.kick(member)
                     else :
-                        await message.channel.send(content="*User {} has been warned...*".format(member.name))
+                        await ctx.send(content="*User {} has been warned...*".format(member.name))
                     try :
                         msg = await warn_channel.send(embed=embed)
                         configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
@@ -42,13 +42,13 @@ async def warn(ctx) :
                     except Exception :
                         await save_config(message.guild)
                 else :
-                    await message.channel.send(content=generate_error("305"))
+                    await ctx.send(content=generate_error("305"))
             else :
-                await message.channel.send(content=generate_error("307"))
+                await ctx.send(content=generate_error("307"))
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def kick(ctx) :
@@ -67,20 +67,20 @@ async def kick(ctx) :
                         reason += arg + " "
                     warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number = kick_user(message.guild, message.author.id, id, reason)
-                    await message.channel.send(content="*User {} has been kicked...*".format(member.name))
+                    await ctx.send(content="*User {} has been kicked...*".format(member.name))
                     await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
                     msg = await warn_channel.send(embed=embed)
                     await member.kick()
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
                     save_config(message.guild)
                 else :
-                    await message.channel.send(content=generate_error("305"))
+                    await ctx.send(content=generate_error("305"))
             else :
-                await message.channel.send(content=generate_error("307"))
+                await ctx.send(content=generate_error("307"))
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def ban(ctx) :
@@ -99,20 +99,20 @@ async def ban(ctx) :
                         reason += arg + " "
                     warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number = ban_user(message.guild, message.author.id, id, reason)
-                    await message.channel.send(content="*User {} has been banned...*".format(member.name))
+                    await ctx.send(content="*User {} has been banned...*".format(member.name))
                     await member.send_message(content=configs[message.guild.id]["BanMessage"].format(guild=message.guild.name, user=member.name))
                     msg = await warn_channel.send(embed=embed)
                     await member.ban()
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
                     save_config(message.guild)
                 else :
-                    await message.channel.send(content=generate_error("305"))
+                    await ctx.send(content=generate_error("305"))
             else :
-                await message.channel.send(content=generate_error("307"))
+                await ctx.send(content=generate_error("307"))
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def set_reason(ctx) :
@@ -136,11 +136,11 @@ async def set_reason(ctx) :
                 await client.edit_message(msg, embed=embed)
                 save_config(guild)
             else :
-                await message.channel.send(content=generate_error("304"))
+                await ctx.send(content=generate_error("304"))
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def set_kick_message(ctx) :
@@ -149,12 +149,12 @@ async def set_kick_message(ctx) :
         if is_moderator(message.author) :
             reason = message.content[20:]
             configs[message.guild.id]["KickMessage"] = reason
-            await message.channel.send(content="Your new kick message is now '{}'".format(reason.format(user=message.author, guild=message.guild.name)))
+            await ctx.send(content="Your new kick message is now '{}'".format(reason.format(user=message.author, guild=message.guild.name)))
             save_config(message.guild)
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def set_ban_message(ctx) :
@@ -163,12 +163,12 @@ async def set_ban_message(ctx) :
         if is_moderator(message.author) :
             reason = message.content[19:]
             configs[message.guild.id]["BanMessage"] = reason
-            await message.channel.send(content="Your new ban message is now '{}'".format(reason.format(user=message.author, guild=message.guild.name)))
+            await ctx.send(content="Your new ban message is now '{}'".format(reason.format(user=message.author, guild=message.guild.name)))
             save_config(message.guild)
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def set_warning_channel(ctx) :
@@ -179,12 +179,12 @@ async def set_warning_channel(ctx) :
             channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
             guild = message.guild
             configs[guild.id]["Mod"]["TextChannel"] = channel_id
-            await message.channel.send(content="The warning channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
+            await ctx.send(content="The warning channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
             save_config(guild)
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def set_welcome_channel(ctx) :
@@ -195,12 +195,12 @@ async def set_welcome_channel(ctx) :
             channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
             guild = message.guild
             configs[guild.id]["JoinChannel"] = channel_id
-            await message.channel.send(content="The welcome channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
+            await ctx.send(content="The welcome channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
             save_config(guild)
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def set_max_warns(ctx) :
@@ -211,14 +211,14 @@ async def set_max_warns(ctx) :
             try :
                 num = int(num)
                 configs[message.guild.id]["Mod"]["MaxWarnings"] = num
-                await message.channel.send(content="The maximum amount of warnings before a kick occurs is now '{}'".format(num))
+                await ctx.send(content="The maximum amount of warnings before a kick occurs is now '{}'".format(num))
                 save_config(message.guild)
             except Exception as e :
-                await message.channel.send(content=generate_error("306"))
+                await ctx.send(content=generate_error("306"))
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def reset_warns(ctx) :
@@ -229,14 +229,14 @@ async def reset_warns(ctx) :
             if id != "" and id in configs[message.guild.id]["Profiles"] :
                 member = message.guild.get_member(int(id))
                 configs[message.guild.id]["Profiles"][str(id)]["Warnings"] = 0
-                await message.channel.send(content="{}'s warnings have been reset!".format(member.mention))
+                await ctx.send(content="{}'s warnings have been reset!".format(member.mention))
                 save_config(message.guild)
             else :
-                await message.channel.send(content=generate_error("307"))
+                await ctx.send(content=generate_error("307"))
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def get_warns(ctx) :
@@ -248,18 +248,18 @@ async def get_warns(ctx) :
                 member = message.guild.get_member(int(id))
                 warnings = int(configs[message.guild.id]["Profiles"][str(id)]["Warnings"]) #probably not needed to cast to int, but im tired so i cannot think straight lol
                 if warnings == 0 :
-                    await message.channel.send(content="{} has {} warnings! <a:TsuDanceBot:542450965463433226>".format(member.mention, warnings))
+                    await ctx.send(content="{} has {} warnings! <a:TsuDanceBot:542450965463433226>".format(member.mention, warnings))
                 elif warnings == 1 :
-                    await message.channel.send(content="{} has {} warning!".format(member.mention, warnings))
+                    await ctx.send(content="{} has {} warning!".format(member.mention, warnings))
                 else :
-                    await message.channel.send(content="{} has {} warnings!".format(member.mention, warnings))
+                    await ctx.send(content="{} has {} warnings!".format(member.mention, warnings))
                 #save_config(message.guild)
             else :
-                await message.channel.send(content="Either the ID is incorrect, or this person has never joined this guild. You can assume they have 0 warnings <:TsuSmileBot:541997306413580288>")
+                await ctx.send(content="Either the ID is incorrect, or this person has never joined this guild. You can assume they have 0 warnings <:TsuSmileBot:541997306413580288>")
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def purge(ctx) :
@@ -271,13 +271,13 @@ async def purge(ctx) :
                 #purge
                 num = int(num)
                 await message.channel.purge(limit=num+1)
-                await message.channel.send(content="*Purged {} messages...*".format(num))
+                await ctx.send(content="*Purged {} messages...*".format(num))
             else :
-                await message.channel.send(content=generate_error("306"))
+                await ctx.send(content=generate_error("306"))
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def save_config(ctx) :
@@ -285,11 +285,11 @@ async def save_config(ctx) :
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             save_config(message.guild)
-            await message.channel.send(content="Your config file has been saved!")
+            await ctx.send(content="Your config file has been saved!")
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def reload_config(ctx) :
@@ -297,11 +297,11 @@ async def reload_config(ctx) :
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             import_config(message.guild)
-            await message.channel.send(content="Your config file has been reloaded!")
+            await ctx.send(content="Your config file has been reloaded!")
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def export_config(ctx) :
@@ -309,8 +309,8 @@ async def export_config(ctx) :
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             import_config(message.guild)
-            await message.channel.send(file="{}-config.json".format(message.guild.id))
+            await ctx.send(file="{}-config.json".format(message.guild.id))
         else :
-            await message.channel.send(content=generate_error("302"))
+            await ctx.send(content=generate_error("302"))
     else :
-        await message.channel.send(content=generate_error("303"))
+        await ctx.send(content=generate_error("303"))
