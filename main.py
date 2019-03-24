@@ -31,7 +31,7 @@ async def on_guild_join(guild) :
     await update_presence_guild()
 
 @client.event
-async def on_member_join(member):
+async def on_member_join(member) :
     joinchannel = str(configs[member.guild.id]["JoinChannel"]).strip()
     joinmessages = configs[member.guild.id]["JoinMessages"]
     #print(member.guild)
@@ -51,7 +51,7 @@ async def on_member_join(member):
             "ChatXP": 0
         }
 
-    await client.send_message(member.guild.get_channel(joinchannel), random.choice(joinmessages).format(user=member.mention, guild=member.guild))
+    await member.guild.get_channel(joinchannel).send_message(random.choice(joinmessages).format(user=member.mention, guild=member.guild))
 
 """
 @client.event
