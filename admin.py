@@ -195,7 +195,7 @@ async def set_welcome_channel(ctx) :
             channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
             guild = message.guild
             configs[guild.id]["JoinChannel"] = channel_id
-            await ctx.send(content="The welcome channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
+            await ctx.send(content="The welcome channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(int(channel_id)).mention, channel_id))
             save_config(guild)
         else :
             await ctx.send(content=generate_error("302"))
