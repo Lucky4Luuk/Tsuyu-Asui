@@ -1,11 +1,13 @@
 from globals import *
 from utils import *
 
-async def imlonely(message) :
-    await message.channel.send(content="Hi lonely I'm dad")
+@client.command()
+async def imlonely(ctx) :
+    await ctx.message.channel.send(content="Hi lonely I'm dad")
 
-async def neato(message) :
-    await message.channel.send(content="""||```
+@client.command()
+async def neato(ctx) :
+    await ctx.message.channel.send(content="""||```
 ███╗   ██╗███████╗ █████╗ ████████╗ ██████╗
 ████╗  ██║██╔════╝██╔══██╗╚══██╔══╝██╔═══██╗
 ██╔██╗ ██║█████╗  ███████║   ██║   ██║   ██║
@@ -13,8 +15,9 @@ async def neato(message) :
 ██║ ╚████║███████╗██║  ██║   ██║   ╚██████╔╝
 ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ```||""")
 
-async def epic(message) :
-    await message.channel.send(content="""||```
+@client.command()
+async def epic(ctx) :
+    await ctx.message.channel.send(content="""||```
 ███████╗██████╗ ██╗ ██████╗
 ██╔════╝██╔══██╗██║██╔════╝
 █████╗  ██████╔╝██║██║

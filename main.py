@@ -53,6 +53,7 @@ async def on_member_join(member):
 
     await client.send_message(member.guild.get_channel(joinchannel), random.choice(joinmessages).format(user=member.mention, guild=member.guild))
 
+"""
 @client.event
 async def on_message(message):
     if message.content == message.guild.me.mention :
@@ -69,9 +70,9 @@ async def on_message(message):
         await message.channel.send(content=result)
     elif message.content.startswith("ta!stats") :
         embed=discord.Embed()
-        embed.set_author(name="Server Stats")
-        embed.add_field(name="Ping", value="{ping}", inline=True)
-        embed.add_field(name="Guild Count", value="{guild_count}"", inline=True)
+        #embed.set_author(name="Server Stats")
+        #embed.add_field(name="Ping", value="{ping}", inline=True)
+        #embed.add_field(name="Guild Count", value="{guild_count}"", inline=True)
         #embed.add_field(name="help", value="nope", inline=False)
         await message.channel.send(embed=embed)
 
@@ -100,8 +101,8 @@ async def on_message(message):
 
     elif message.content.startswith("ta!admin") :
         await admin.admin(message)
-    elif message.content.startswith("ta!warn") :
-        await admin.warn(message)
+    #elif message.content.startswith("ta!warn") :
+    #    await admin.warn(message)
     elif message.content.startswith("ta!kick") :
         await admin.kick(message)
     elif message.content.startswith("ta!ban") :
@@ -191,5 +192,6 @@ async def on_message(message):
 
     elif message.content.startswith("ta!") :
         await message.channel.send(content=generate_error("301"))
+"""
 
 client.run(TOKEN)

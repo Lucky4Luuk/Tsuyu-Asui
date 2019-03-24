@@ -2,6 +2,7 @@ from globals import *
 from utils import *
 import discord
 
+@client.command()
 async def categories(message) :
     embed = discord.Embed(color=HELP_COLOR)
     embed.set_author(name=HELP_DATA["title"], icon_url=HELP_DATA["icon_url"])
