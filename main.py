@@ -51,7 +51,7 @@ async def on_member_join(member) :
             "ChatXP": 0
         }
 
-    await member.guild.get_channel(int(joinchannel)).send_message(random.choice(joinmessages).format(user=member.mention, guild=member.guild))
+    await member.guild.get_channel(int(joinchannel)).send(random.choice(joinmessages).format(user=member.mention, guild=member.guild))
 
 """
 @client.event
