@@ -32,6 +32,10 @@ async def warn(ctx) :
                     embed, case_number, got_kicked = warn_user(message.guild, message.author.id, id, reason)
                     if got_kicked :
                         await ctx.send(content="*User {} has been kicked...*".format(member.name))
+                        try :
+                            await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
+                        except Exception :
+                            await ctx.send(content="*Unable to send {} the kick message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
                         await client.kick(member)
                     else :
                         await ctx.send(content="*User {} has been warned...*".format(member.name))
@@ -68,7 +72,10 @@ async def kick(ctx) :
                     warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number = kick_user(message.guild, message.author.id, id, reason)
                     await ctx.send(content="*User {} has been kicked...*".format(member.name))
-                    await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
+                    try :
+                        await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
+                    except Exception :
+                        await ctx.send(content="*Unable to send {} the kick message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
                     msg = await warn_channel.send(embed=embed)
                     await member.kick()
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
@@ -100,7 +107,10 @@ async def ban(ctx) :
                     warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
                     embed, case_number = ban_user(message.guild, message.author.id, id, reason)
                     await ctx.send(content="*User {} has been banned...*".format(member.name))
-                    await member.send_message(content=configs[message.guild.id]["BanMessage"].format(guild=message.guild.name, user=member.name))
+                    try :
+                        await member.send(content=configs[message.guild.id]["BanMessage"].format(guild=message.guild.name, user=member.name))
+                    except Exception :
+                        await ctx.send(content="*Unable to send {} the ban message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
                     msg = await warn_channel.send(embed=embed)
                     await member.ban()
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
