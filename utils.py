@@ -140,8 +140,8 @@ def ban_user(guild, modid, id, reason) :
         "MessageId":0,
         "CaseType":1
     }
-    member = guild.get_member(id)
-    moderator = guild.get_member(modid)
+    member = guild.get_member(int(id))
+    moderator = guild.get_member(int(modid))
     configs[guild.id]["Mod"]["Cases"].append(case)
     timestamp = datetime.datetime.now()
     embed = discord.Embed(color=BAN_COLOR)
