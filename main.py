@@ -62,7 +62,7 @@ def check_link(ctx) :
         #await channel.send(content="ta!warn {} Posted an invite link.".format(id))
         try :
             warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
-            embed, case_number, got_kicked = warn_user(message.guild, message.author.id, id, reason)
+            embed, case_number, got_kicked = warn_user(message.guild, client.id, id, "For posting an invite link.")
             if got_kicked :
                 await ctx.send(content="*User {} has been kicked...*".format(member.name))
                 try :
