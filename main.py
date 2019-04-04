@@ -53,8 +53,9 @@ async def on_member_join(member) :
 
     await member.guild.get_channel(int(joinchannel)).send(random.choice(joinmessages).format(user=member.mention, guild=member.guild))
 
-@client.event
-async def on_message(message) :
+@client.check
+def check_link(ctx) :
+    message = ctx.message
     if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
         channel = message.channel
         id = message.author.id
