@@ -6,6 +6,7 @@ import datetime
 import os
 import aiohttp
 import urllib #not actually for doing link stuff, because it's blocking
+import math
 
 #custom imports
 from globals import *
@@ -53,13 +54,17 @@ async def on_member_join(member) :
 
     await member.guild.get_channel(int(joinchannel)).send(random.choice(joinmessages).format(user=member.mention, guild=member.guild))
 
+@client.command()
+async def ping(ctx) :
+    await ctx.send("Pong! Current ping: {} ms!".format(math.floor(client.latency * 10000)/10))
+
 async def remove_link(message) :
     channel = message.channel
     id = message.author.id
     #await channel.send(content="ta!warn {} Posted an invite link.".format(id))
     try :
         warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
-        embed, case_number, got_kicked = warn_user(message.guild, client.id, id, "For posting an invite link.")
+        embed, case_number, got_kicked = warn_user(message.guild, BOT_ID, id, "For posting an invite link.")
         if got_kicked :
             await ctx.send(content="*User {} has been kicked...*".format(member.name))
             try :
