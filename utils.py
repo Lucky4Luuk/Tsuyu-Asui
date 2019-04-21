@@ -7,9 +7,12 @@ def check_word_blacklist(message) :
         return False
     if "ta!set_word_blacklist" in message.content :
         return False
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            return False
     blacklist = configs[message.guild.id]["WordBlacklist"]
     for word in blacklist :
-        if word in message.content :
+        if word.lower() in message.content.lower() :
             return True
     return False
 
