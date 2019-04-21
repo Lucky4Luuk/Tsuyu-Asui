@@ -2,6 +2,17 @@ from globals import *
 import datetime
 import discord
 
+def check_word_blacklist(message) :
+    if not "WordBlacklist" in configs[message.guild.id].keys() :
+        return False
+    if "ta!set_word_blacklist" in message.content :
+        return False
+    blacklist = configs[message.guild.id]["WordBlacklist"]
+    for word in blacklist :
+        if word in message.content :
+            return True
+    return False
+
 async def update_presence_guild() :
     text = "Currently in {} guilds!".format(len(client.guilds))
     if len(client.guilds) == 1 :

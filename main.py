@@ -80,9 +80,13 @@ async def remove_link(message) :
 
 @client.event
 async def on_message(message) :
-    if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
-        await remove_link(message)
-    else :
-        await client.process_commands(message)
+    if message.author.id != BOT_ID :
+        if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
+            await remove_link(message)
+        elif check_word_blacklist(message) :
+            await message.delete()
+            await message.channel.send("One of the words you said are in the word blacklist! Please refrain from using this word in the future. Thank you <:TsuSmileBot:541997306413580288>")
+        else :
+            await client.process_commands(message)
 
 client.run(TOKEN)
