@@ -350,7 +350,7 @@ async def purge(ctx) :
         await ctx.send(content=generate_error("303"))
 
 @client.command()
-async def save_config(ctx) :
+async def save_server_config(ctx) :
     message = ctx.message
     if message.author.guild_permissions :
         if is_moderator(message.author) :
