@@ -15,16 +15,35 @@ async def admin(ctx) :
 
 @client.command()
 async def set_word_blacklist(ctx) :
-    args = ctx.message.content[21].split(",")
-    if len(args) > 0 :
-        configs[ctx.message.guild.id]["WordBlacklist"] = args
-        await ctx.send("The new blacklist of words is now: {}".format(args))
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            args = message.content[22:].split(",")
+            if not "," in message.content[22:] :
+                args = [message.content[22:]]
+            if len(args) > 0 :
+                configs[message.guild.id]["WordBlacklist"] = args
+                await ctx.send("The new word blacklist is:\n'{}'".format(args))
+            else :
+                await ctx.send(content=generate_error("308"))
+        else :
+            await ctx.send(content=generate_error("302"))
     else :
-        await ctx.send(content=generate_error("308"))
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def get_word_blacklist(ctx) :
-    await ctx.send("The blacklist of words is: {}".format(args))
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            if "WordBlacklist" in configs[message.guild.id].keys() :
+                await ctx.send(content="The current word blacklist is:\n'{}'".format(configs[message.guild.id]["WordBlacklist"]))
+            else :
+                await ctx.send(content=generate_error("311"))
+        else :
+            await ctx.send(content=generate_error("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
 
 @client.command()
 async def warn(ctx) :
@@ -188,6 +207,34 @@ async def set_ban_message(ctx) :
             configs[message.guild.id]["BanMessage"] = reason
             await ctx.send(content="Your new ban message is now '{}'".format(reason.format(user=message.author, guild=message.guild.name)))
             save_config(message.guild)
+        else :
+            await ctx.send(content=generate_error("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
+
+@client.command()
+async def get_kick_message(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            if configs[message.guild.id]["KickMessage"] :
+                await ctx.send(content="The current kick message is:\n{}".format(configs[message.guild.id]["KickMessage"]))
+            else :
+                await ctx.send(content=generate_error("309"))
+        else :
+            await ctx.send(content=generate_error("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
+
+@client.command()
+async def get_ban_message(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            if configs[message.guild.id]["BanMessage"] :
+                await ctx.send(content="The current ban message is:\n{}".format(configs[message.guild.id]["BanMessage"]))
+            else :
+                await ctx.send(content=generate_error("310"))
         else :
             await ctx.send(content=generate_error("302"))
     else :
