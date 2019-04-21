@@ -13,6 +13,7 @@
   "305": "Cannot run this command on a user with a similar or higher rank than yours (Admin Command)",
   "306": "The argument passed should be a number (Admin Command)",
   "307": "The ID is either missing or invalid (Admin Command)",
+  "308": "Make sure you split the words using a comma, like this: 'hello,this,is,blacklisted'.",
 
   "501": "Cannot find the code (Interpreters)"
 }

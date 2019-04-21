@@ -14,6 +14,19 @@ async def admin(ctx) :
         await ctx.send(content=generate_error("303"))
 
 @client.command()
+async def set_word_blacklist(ctx) :
+    args = ctx.message.content[21].split(",")
+    if len(args) > 0 :
+        configs[ctx.message.guild.id]["WordBlacklist"] = args
+        await ctx.send("The new blacklist of words is now: {}".format(args))
+    else :
+        await ctx.send(content=generate_error("308"))
+
+@client.command()
+async def get_word_blacklist(ctx) :
+    await ctx.send("The blacklist of words is: {}".format(args))
+
+@client.command()
 async def warn(ctx) :
     message = ctx.message
     if message.author.guild_permissions :
@@ -36,7 +49,7 @@ async def warn(ctx) :
                             await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
                         except Exception :
                             await ctx.send(content="*Unable to send {} the kick message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
-                        await client.kick(member)
+                        await member.kick()
                     else :
                         await ctx.send(content="*User {} has been warned...*".format(member.name))
                     try :
@@ -75,7 +88,7 @@ async def kick(ctx) :
                     try :
                         await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
                     except Exception :
-                        await ctx.send(content="*Unable to send {} the kick message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
+                        await ctx.send(content="*Unable to send {} the kick message, they might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
                     msg = await warn_channel.send(embed=embed)
                     await member.kick()
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
@@ -110,7 +123,7 @@ async def ban(ctx) :
                     try :
                         await member.send(content=configs[message.guild.id]["BanMessage"].format(guild=message.guild.name, user=member.name))
                     except Exception :
-                        await ctx.send(content="*Unable to send {} the ban message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
+                        await ctx.send(content="*Unable to send {} the ban message, they might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
                     msg = await warn_channel.send(embed=embed)
                     await member.ban()
                     configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
