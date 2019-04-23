@@ -125,7 +125,19 @@ def kick_user(guild, modid, id, reason, from_warn=False) :
         "MessageId":0,
         "CaseType":2
     }
-    configs[guild.id]["Profiles"][id]["Warnings"] += 1
+    if id in configs[guild.id]["Profiles"] :
+        configs[guild.id]["Profiles"][id]["Warnings"] += 1
+    else :
+        configs[guild.id]["Profiles"][id] = {
+            "DailyReward": None,
+            "IsBlacklisted": False,
+            #"LastMessage": "2018-07-03T23:25:37.5596571",
+            "Warnings": 1,
+            "Credits": 0,
+            "Commands": {},
+            "DailyStreak": 0,
+            "ChatXP": 0
+        }
     member = guild.get_member(int(id))
     moderator = guild.get_member(int(modid))
     if from_warn == False :
@@ -154,6 +166,19 @@ def ban_user(guild, modid, id, reason) :
         "MessageId":0,
         "CaseType":1
     }
+    if id in configs[guild.id]["Profiles"] :
+        configs[guild.id]["Profiles"][id]["Warnings"] += 1
+    else :
+        configs[guild.id]["Profiles"][id] = {
+            "DailyReward": None,
+            "IsBlacklisted": False,
+            #"LastMessage": "2018-07-03T23:25:37.5596571",
+            "Warnings": 1,
+            "Credits": 0,
+            "Commands": {},
+            "DailyStreak": 0,
+            "ChatXP": 0
+        }
     member = guild.get_member(int(id))
     moderator = guild.get_member(int(modid))
     configs[guild.id]["Mod"]["Cases"].append(case)
