@@ -74,9 +74,9 @@ async def warn(ctx) :
                     try :
                         msg = await warn_channel.send(embed=embed)
                         configs[message.guild.id]["Mod"]["Cases"][case_number-1]["MessageId"] = int(msg.id)
-                        await save_config(message.guild)
+                        save_config(message.guild)
                     except Exception :
-                        await save_config(message.guild)
+                        save_config(message.guild)
                 else :
                     await ctx.send(content=generate_error("305"))
             else :

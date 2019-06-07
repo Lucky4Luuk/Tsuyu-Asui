@@ -62,21 +62,27 @@ async def remove_link(message) :
     channel = message.channel
     id = message.author.id
     #await channel.send(content="ta!warn {} Posted an invite link.".format(id))
-    try :
-        warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
-        embed, case_number, got_kicked = warn_user(message.guild, BOT_ID, id, "For posting an invite link.")
-        if got_kicked :
-            await ctx.send(content="*User {} has been kicked...*".format(member.name))
-            try :
-                await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
-            except Exception :
-                await channel.send(content="*Unable to send {} the kick message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
-            await client.kick(member)
-        else :
-            await channel.send(content="*User {} has been warned...*".format(member.name))
-    except Exception as e :
-        print(e)
-    await message.delete()
+    if not (message.author.guild_permissions and is_moderator(message.author)) :
+        try :
+            warn_channel = message.guild.get_channel(int(configs[message.guild.id]["Mod"]["TextChannel"]))
+            embed, case_number, got_kicked = warn_user(message.guild, BOT_ID, id, "For posting an invite link.")
+            if got_kicked :
+                await ctx.send(content="*User {} has been kicked...*".format(member.name))
+                try :
+                    await member.send(content=configs[message.guild.id]["KickMessage"].format(guild=message.guild.name, user=member.name))
+                except Exception :
+                    await channel.send(content="*Unable to send {} the kick message, he might've blocked me or turned off DMs* <a:TsuCryingBot:541325707540824085>".format(member.name))
+                await client.kick(member)
+            else :
+                await channel.send(content="*User {} has been warned...*".format(member.name))
+        except Exception as e :
+            print(e)
+        await message.delete()
+
+###WIP just ignore it i dont want to deal with anything right now
+#@client.event
+#async def on_member_ban(guild, user) :
+#
 
 @client.event
 async def on_message(message) :
