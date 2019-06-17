@@ -116,9 +116,10 @@ async def on_message(message) :
     if message.author.id != BOT_ID :
         if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
             await remove_link(message)
-        elif has_big_codeblock(message) :
+        elif (not message.author.bot) && has_big_codeblock(message) :
             await handle_codeblock(message)
         elif check_word_blacklist(message) :
+            print(message.content)
             await message.delete()
             await message.channel.send("One of the words you said are in the word blacklist! Please refrain from using this word in the future. Thank you <:TsuSmileBot:541997306413580288>")
         else :
