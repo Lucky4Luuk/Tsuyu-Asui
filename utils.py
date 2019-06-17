@@ -2,6 +2,12 @@ from globals import *
 import datetime
 import discord
 
+def has_big_codeblock(message) :
+    block = re.search("```((.|\n)+)```", message.content)
+    if block and len(block.group()) > 80 :
+        return True
+    return False
+
 def check_word_blacklist(message) :
     if not "WordBlacklist" in configs[message.guild.id].keys() :
         return False

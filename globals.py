@@ -3,6 +3,9 @@ import json
 import discord
 from discord.ext import commands
 import asyncio
+import requests
+import re
+import urllib.parse
 
 if not os.path.isfile("token.txt"):
     print("token.txt was not found, create it and put your token in there")
@@ -41,6 +44,8 @@ NEKOS_LIFE = "https://nekos.life/api/v2/img/{}"
 f = open("nekos_nsfw_endpoints.json")
 NEKOS_NSFW_ENDPOINTS = json.load(f)
 f.close()
+
+PASTE_MYST = "https://paste.myst.rs/"
 
 configs = {}
 

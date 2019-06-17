@@ -84,11 +84,40 @@ async def remove_link(message) :
 #async def on_member_ban(guild, user) :
 #
 
+async def handle_codeblock(message) :
+    block = re.search("```((.|\n)+)```", message.content)
+    other_content = message.content.replace(block.group(), "")
+    other_content = "\n" + other_content.replace("\n", "\n//")
+
+    lang = block.group().split("\n",1)[0].strip()[3:]
+
+    code = block.group().replace("```", "").replace(lang, "")
+
+    data = urllib.parse.quote(other_content + code, safe='~()*!.\'')
+    payload = {"code": data, "expiresIn": "1w"}
+    #print(json.dumps(payload))
+    #r = requests.post(PASTE_MYST, data=json.dumps(payload))
+#    payload = '{' + '''
+#    "code": "{data}",
+#    "expiresIn": "1w"
+#'''.format(data=data) + '}'
+    #print(payload)
+    r = requests.post(PASTE_MYST + "api/paste", json=payload)
+    #print(r.text)
+    #print(r.status_code)
+    #print(r.json())
+    json_data = r.json()
+    link = PASTE_MYST + json_data["id"]
+    await message.channel.send("Large codeblock detected!\nThe message and the codeblock have been neatly packaged and uploaded to the internet!\nYou can find it here: {} <:TsuSmileBot:541997306413580288>\nPS: You can find the rest of the message in the link as well, as a comment.".format(link))
+    await message.delete()
+
 @client.event
 async def on_message(message) :
     if message.author.id != BOT_ID :
         if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
             await remove_link(message)
+        elif has_big_codeblock(message) :
+            await handle_codeblock(message)
         elif check_word_blacklist(message) :
             await message.delete()
             await message.channel.send("One of the words you said are in the word blacklist! Please refrain from using this word in the future. Thank you <:TsuSmileBot:541997306413580288>")
