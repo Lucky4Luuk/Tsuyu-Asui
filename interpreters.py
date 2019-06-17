@@ -1,3 +1,15 @@
+from globals import *
+from utils import *
+
+@client.command()
+async def brainfuck(ctx) :
+    code = ctx.message.content[13:].replace("`", "").strip()
+    if code != "" :
+        result = brainfuck_evaluate(code)
+        await ctx.send(content="```OUTPUT:\n{}```".format(result))
+    else :
+        await ctx.send(content=generate_error("501"))
+
 #brainfuck interpreter from: https://github.com/pocmo/Python-Brainfuck/ thank you x)
 
 def brainfuck_evaluate(code):

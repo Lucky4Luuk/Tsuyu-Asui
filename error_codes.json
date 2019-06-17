@@ -13,6 +13,10 @@
   "305": "Cannot run this command on a user with a similar or higher rank than yours (Admin Command)",
   "306": "The argument passed should be a number (Admin Command)",
   "307": "The ID is either missing or invalid (Admin Command)",
+  "308": "Make sure you split the words using a comma, like this: 'hello,this,is,blacklisted' (Admin Command)",
+  "309": "The kick message doesn't exist yet! Set a kick message using ta!set_kick_message (Admin Command)",
+  "310": "The ban message doesn't exist yet! Set a ban message using ta!set_ban_message (Admin Command)",
+  "311": "There isn't a word blacklist yet. Set one using ta!set_word_blacklist (Admin Command)",
 
   "501": "Cannot find the code (Interpreters)"
 }
