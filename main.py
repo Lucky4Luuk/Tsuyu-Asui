@@ -116,7 +116,7 @@ async def on_message(message) :
     if message.author.id != BOT_ID :
         if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
             await remove_link(message)
-        elif (not message.author.bot) && has_big_codeblock(message) :
+        elif (not message.author.bot) and has_big_codeblock(message) :
             await handle_codeblock(message)
         elif check_word_blacklist(message) :
             print(message.content)
