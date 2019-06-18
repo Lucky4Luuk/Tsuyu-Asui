@@ -108,7 +108,7 @@ async def handle_codeblock(message) :
     #print(r.json())
     json_data = r.json()
     link = PASTE_MYST + json_data["id"]
-    await message.channel.send("Large codeblock detected!\nThe message and the codeblock have been neatly packaged and uploaded to the internet!\nYou can find it here: {} <:TsuSmileBot:541997306413580288>\nPS: You can find the rest of the message in the link as well, as a comment.".format(link))
+    await message.channel.send("[{}]\nLarge codeblock detected!\nThe message and the codeblock have been neatly packaged and uploaded to the internet!\nYou can find it here: {} <:TsuSmileBot:541997306413580288>\nPS: You can find the rest of the message in the link as well, as a comment.".format(message.author.mention, link))
     await message.delete()
 
 @client.event
