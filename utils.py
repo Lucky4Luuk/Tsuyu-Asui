@@ -4,7 +4,7 @@ import discord
 
 def has_big_codeblock(message) :
     block = re.search("```((.|\n)+)```", message.content)
-    if block and (len(block.group()) > 240 or len(block.group().split("\n")) > 8) :
+    if block and (len(block.group()) > 540 or len(block.group().split("\n")) > 12) :
         return True
     return False
 
