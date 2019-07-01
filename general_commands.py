@@ -14,8 +14,10 @@ async def github(ctx) :
 
 @client.command()
 async def invite(ctx) :
+    await ctx.send(content="Check your DM's! <:TsuSmileBot:541997306413580288>")
     await ctx.message.author.send(content="Here you go: https://discordapp.com/api/oauth2/authorize?client_id=515859822441136130&permissions=8&scope=bot\nFor more info, either use ta!help or refer to the readme file on Github! <:TsuComfyBot:541315853149536257>")
 
 @client.command()
 async def discord(ctx) :
+    await ctx.send(content="Check your DM's! <:TsuSmileBot:541997306413580288>")
     await ctx.message.author.send(content="Here's my Discord invite link: https://discord.gg/He9ZcwR <:TsuComfyBot:541315853149536257>")
