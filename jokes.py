@@ -1,5 +1,6 @@
 from globals import *
 from utils import *
+import aiohttp
 
 @client.command()
 async def imlonely(ctx) :
@@ -31,12 +32,109 @@ async def vsauce(ctx) :
     await ctx.send(file=discord.File("assets/tsuyu_michael_please.png"))
     #f.close()
 
-#Will finish these 2 commands at some point, however first I'd like to finally add a custom help command
-#UPDATE: help command seems to be working, next commit hopefully has these 2 working.
 @client.command()
-async def pat(ctx) :
-    await ctx.send(content="WIP")
+async def clap(ctx) :
+    await ctx.send(content="👏 " + ctx.message.content[8:].replace(" ", " 👏 ") + " 👏")
 
 @client.command()
-async def hug(ctx) :
-    await ctx.send(content="WIP")
+async def expand(ctx) :
+    result = ""
+    for char in ctx.message.content[10:] :
+        result += char + " "
+    await ctx.send(content=result)
+
+@client.command()
+async def pat(ctx, user = None) :
+    mention = "themself :O"
+    if user :
+        try :
+            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
+        except Exception :
+            mention = "invalid user"
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get("https://nekos.life/api/v2/img/pat") as r:
+            res = await r.json()
+
+            e = discord.Embed(description="**{}** patted **{}**".format(ctx.author.mention, mention), colour=SKY_BLUE)
+            e.set_image(url=res["url"])
+            await ctx.send(embed=e)
+
+@client.command()
+async def hug(ctx, user = None) :
+    mention = "themself :O"
+    if user :
+        try :
+            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
+        except Exception :
+            mention = "invalid user"
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get("https://nekos.life/api/v2/img/hug") as r:
+            res = await r.json()
+
+            e = discord.Embed(description="**{}** hugged **{}**".format(ctx.author.mention, mention), colour=SKY_BLUE)
+            e.set_image(url=res["url"])
+            await ctx.send(embed=e)
+
+@client.command()
+async def slap(ctx, user = None) :
+    mention = "themself :O"
+    if user :
+        try :
+            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
+        except Exception :
+            mention = "invalid user"
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get("https://nekos.life/api/v2/img/slap") as r:
+            res = await r.json()
+
+            e = discord.Embed(description="**{}** slapped **{}**".format(ctx.author.mention, mention), colour=SKY_BLUE)
+            e.set_image(url=res["url"])
+            await ctx.send(embed=e)
+
+@client.command()
+async def tickle(ctx, user = None) :
+    mention = "themself :O"
+    if user :
+        try :
+            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
+        except Exception :
+            mention = "invalid user"
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get("https://nekos.life/api/v2/img/tickle") as r:
+            res = await r.json()
+
+            e = discord.Embed(description="**{}** tickled **{}**".format(ctx.author.mention, mention), colour=SKY_BLUE)
+            e.set_image(url=res["url"])
+            await ctx.send(embed=e)
+
+@client.command()
+async def kiss(ctx, user = None) :
+    mention = "themself :O"
+    if user :
+        try :
+            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
+        except Exception :
+            mention = "invalid user"
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get("https://nekos.life/api/v2/img/kiss") as r:
+            res = await r.json()
+
+            e = discord.Embed(description="**{}** kissed **{}**".format(ctx.author.mention, mention), colour=SKY_BLUE)
+            e.set_image(url=res["url"])
+            await ctx.send(embed=e)
+
+@client.command()
+async def poke(ctx, user = None) :
+    mention = "themself :O"
+    if user :
+        try :
+            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
+        except Exception :
+            mention = "invalid user"
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get("https://nekos.life/api/v2/img/poke") as r:
+            res = await r.json()
+
+            e = discord.Embed(description="**{}** poked **{}**".format(ctx.author.mention, mention), colour=SKY_BLUE)
+            e.set_image(url=res["url"])
+            await ctx.send(embed=e)

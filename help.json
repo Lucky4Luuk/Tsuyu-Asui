@@ -17,7 +17,14 @@
   "joke_lines": [
     {"name": "ta!vsauce", "value": " - *Hey Vsauce, Michael here!*", "inline": false},
     {"name": "ta!epic", "value": " - *A pretty epic message!*", "inline": false},
-    {"name": "ta!neato", "value": " - *A pretty neato message!*", "inline": false}
+    {"name": "ta!neato", "value": " - *A pretty neato message!*", "inline": false},
+    {"name": "__*Communicative Jokes*__", "value": "** **", "inline": false},
+    {"name": "ta!pat <user>", "value": " - *Pat someone!*", "inline": false},
+    {"name": "ta!hug <user>", "value": " - *Hug someone!*", "inline": false},
+    {"name": "ta!slap <user>", "value": " - *Slap someone!*", "inline": false},
+    {"name": "ta!tickle <user>", "value": " - *Tickle someone!*", "inline": false},
+    {"name": "ta!kiss <user>", "value": " - *Kiss someone!*", "inline": false},
+    {"name": "ta!poke <user>", "value": " - *Poke someone!*", "inline": false}
   ],
   "admin_lines": [
     {"name": "__**Admin Commands**__", "value": "** **", "inline": false},
