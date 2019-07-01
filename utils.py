@@ -64,7 +64,7 @@ def import_all_configs() :
         import_config(guild)
 
 def save_config(guild) :
-    print("====Saving Config====\nguild Name: {}\nID: {}\n\n".format(guild.name, guild.id))
+    print("====Saving Config====\nGuild Name: {}\nID: {}\n\n".format(guild.name, guild.id))
     try :
         f = open("{}-config.json".format(guild.id), "w+", encoding="latin-1")
         f.seek(0)

@@ -271,6 +271,45 @@ async def set_warning_channel(ctx) :
         await ctx.send(content=generate_error("303"))
 
 @client.command()
+async def get_warning_channel(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            guild = message.guild
+            channel_id = configs[guild.id]["Mod"]["TextChannel"]
+            await ctx.send(content="The warning channel is currently: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
+        else :
+            await ctx.send(content=generate_error("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
+
+@client.command()
+async def set_join_message(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            msg = message.content[20:]
+            configs[message.guild.id]["JoinMessages"] = [msg]
+            await ctx.send(content="Your join message is now: '{}'".format(msg.format(user=message.author.mention, guild=message.guild)))
+            save_config(message.guild)
+        else :
+            await ctx.send(content=generate_error("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
+
+@client.command()
+async def get_join_message(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            msg = configs[message.guild.id]["JoinMessages"][0]
+            await ctx.send(content="Your join message is currently: '{}'".format(msg.format(user=message.author.mention, guild=message.guild)))
+        else :
+            await ctx.send(content=generate_error("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
+
+@client.command()
 async def set_welcome_channel(ctx) :
     message = ctx.message
     if message.author.guild_permissions :
@@ -281,6 +320,19 @@ async def set_welcome_channel(ctx) :
             configs[guild.id]["JoinChannel"] = channel_id
             await ctx.send(content="The welcome channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(int(channel_id)).mention, channel_id))
             save_config(guild)
+        else :
+            await ctx.send(content=generate_error("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
+
+@client.command()
+async def get_welcome_channel(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            guild = message.guild
+            channel_id = configs[guild.id]["JoinChannel"]
+            await ctx.send(content="The current welcome channel is: {} - ID: {}".format(guild.get_channel(int(channel_id)).mention, channel_id))
         else :
             await ctx.send(content=generate_error("302"))
     else :
@@ -299,6 +351,18 @@ async def set_max_warns(ctx) :
                 save_config(message.guild)
             except Exception as e :
                 await ctx.send(content=generate_error("306"))
+        else :
+            await ctx.send(content=generate_error("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
+
+@client.command()
+async def get_max_warns(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            num = configs[message.guild.id]["Mod"]["MaxWarnings"]
+            await ctx.send(content="The maximum amount of warnings before a kick occurs is currently '{}'".format(num))
         else :
             await ctx.send(content=generate_error("302"))
     else :

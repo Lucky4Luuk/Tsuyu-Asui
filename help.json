@@ -24,10 +24,20 @@
     {"name": "ta!warn <id/mention>", "value": " - *Warns the specified user. Set the maximum warns before someone gets kicked using ta!set_max_warns*", "inline": false},
     {"name": "ta!kick <id/mention>", "value": " - *Kicks the specified user. DM's the user in question a message, configured using ta!set_kick_message*", "inline": false},
     {"name": "ta!ban <id/mention>", "value": " - *Bans the specified user. DM's the user in question a message, configured using ta!set_ban_message*", "inline": false},
+    {"name": "__*Admin configuration*__", "value": "** **", "inline": false},
     {"name": "ta!set_kick_message <message>", "value": " - *Sets the message that gets sent to anyone kicked using the bot.*", "inline": false},
-    {"name": "ta!set_ban_message <message>", "value": " - *Same as ta!set_kick_message, but for banning people*", "inline": false},
+    {"name": "ta!set_ban_message <message>", "value": " - *Same as ta!set_kick_message, but for banned people.*", "inline": false},
+    {"name": "ta!get_kick_message", "value": " - *Gets the message that gets sent to anyone kicked using the bot.*", "inline": false},
+    {"name": "ta!get_ban_message", "value": " - *Same as ta!get_ban_message, but for banned people.*", "inline": false},
     {"name": "ta!set_warning_channel <id/channel-mention>", "value": " - *Sets the channel that warnings are logged to!*", "inline": false},
+    {"name": "ta!get_warning_channel", "value": " - *Gets the channel that warnings are logged to!*", "inline": false},
     {"name": "ta!get_warns <id>", "value": " - *Gets the amount of warnings a person has!*", "inline": false},
-    {"name": "ta!set_max_warns <number>", "value": " - *Sets the amount of warnings a person can have before they get kicked!*", "inline": false}
+    {"name": "ta!set_max_warns <number>", "value": " - *Sets the amount of warnings a person can have before they get kicked!*", "inline": false},
+    {"name": "ta!get_max_warns", "value": " - *Gets the amount of warnings a person can have before they get kicked!*", "inline": false},
+    {"name": "ta!set_word_blacklist <list>", "value": " - *Sets the word blacklist. Any messages with these words get deleted. List is specified as words separated by commas, no spaces.", "inline": false},
+    {"name": "ta!get_word_blacklist", "value": " - *Gets the word blacklist.*", "inline": false},
+    {"name": "ta!set_slowmode_delay <number>", "value": " - *Sets the slowmode delay for the current channel. Kind of useless, as  you can set it using the GUI.*", "inline": false},
+    {"name": "ta!set_welcome_channel <id/channel-mention>", "value": " - *Sets the welcome channel for new people!*", "inline": false},
+    {"name": "ta!get_welcome_channel", "value": " - *Gets the welcome channel for new people!*", "inline": false}
   ]
 }
