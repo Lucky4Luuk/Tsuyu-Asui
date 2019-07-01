@@ -2,7 +2,8 @@
   "title": "Help panel",
   "icon_url": "https://cdn.discordapp.com/attachments/542713799744946176/542713953394884629/tsuyu_asui.png",
   "category_lines": [
-    {"name": "__**Core Commands**__", "value": " - *ta!help*", "inline": false},
+    {"name": "__**Core Commands**__", "value": " - *ta!help*\n", "inline": false},
+    {"name": "__**Joke Commands**__", "value": " - *ta!help jokes*\n", "inline": false},
     {"name": "__**Admin Commands**__", "value": " - *ta!help admin*", "inline": false}
   ],
   "core_lines": [
@@ -11,7 +12,10 @@
     {"name": "ta!help categories", "value": " - *Shows you all the possible categories for help, including this one!*", "inline": false},
     {"name": "ta!invite", "value": " - *DM's you an invite link for the bot!*", "inline": false},
     {"name": "ta!discord", "value": " - *DM's you an invite link for the bot's Discord server!*", "inline": false},
-    {"name": "ta!github", "value": " - *Gives you your very own link to the bot's Github page!*", "inline": false},
+    {"name": "ta!github", "value": " - *Gives you your very own link to the bot's Github page!*", "inline": false}
+  ],
+  "joke_lines": [
+    {"name": "ta!vsauce", "value": " - *Hey Vsauce, Michael here!*", "inline": false},
     {"name": "ta!epic", "value": " - *A pretty epic message!*", "inline": false},
     {"name": "ta!neato", "value": " - *A pretty neato message!*", "inline": false}
   ],
