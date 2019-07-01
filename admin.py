@@ -46,6 +46,20 @@ async def get_word_blacklist(ctx) :
         await ctx.send(content=generate_error("303"))
 
 @client.command()
+async def set_slowmode_delay(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            delay = int(message.content.split(" ")[1])
+            #ctx.message.channel.slowmode_delay = delay
+            await ctx.message.channel.edit(slowmode_delay=delay)
+            await ctx.send("Set slowmode delay in current channel to `{}`".format(delay))
+        else :
+            print("yeet")
+    else  :
+        print("yeet")
+
+@client.command()
 async def warn(ctx) :
     message = ctx.message
     if message.author.guild_permissions :
