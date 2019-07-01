@@ -31,6 +31,7 @@ async def on_ready():
 
 @client.event
 async def on_guild_join(guild) :
+    import_config(guild)
     await update_presence_guild()
 
 @client.event
