@@ -29,6 +29,8 @@ LUUK_ID = 183315569745985545
 BOT_ID = 515859822441136130
 RHONE_ID = 84131451431292928
 
+GITHUB = "https://github.com/Lucky4Luuk/Tsuyu-Asui"
+
 #colors
 FROG_GREEN = 0x00b700
 HONEY_ORANGE = 0xfa6912
@@ -50,4 +52,4 @@ PASTE_MYST = "https://paste.myst.rs/"
 configs = {}
 
 #client = discord.Client()
-client = commands.Bot(command_prefix="ta!")
+client = commands.Bot(command_prefix="ta!", help_command=None)

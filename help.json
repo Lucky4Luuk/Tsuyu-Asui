@@ -2,7 +2,7 @@
   "title": "Help panel",
   "icon_url": "https://cdn.discordapp.com/attachments/542713799744946176/542713953394884629/tsuyu_asui.png",
   "category_lines": [
-    {"name": "__**Core Commands**__", "value": " - *ta!help / ta!help core*", "inline": false},
+    {"name": "__**Core Commands**__", "value": " - *ta!help*", "inline": false},
     {"name": "__**Admin Commands**__", "value": " - *ta!help admin*", "inline": false}
   ],
   "core_lines": [

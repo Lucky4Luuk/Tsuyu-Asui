@@ -24,3 +24,19 @@ async def epic(ctx) :
 ██╔══╝  ██╔═══╝ ██║██║
 ███████╗██║     ██║╚██████╗
 ╚══════╝╚═╝     ╚═╝ ╚═════╝```||""")
+
+@client.command()
+async def vsauce(ctx) :
+    #f = open("assets/tsuyu_michael_please.png")
+    await ctx.send(file=discord.File("assets/tsuyu_michael_please.png"))
+    #f.close()
+
+#Will finish these 2 commands at some point, however first I'd like to finally add a custom help command
+#UPDATE: help command seems to be working, next commit hopefully has these 2 working.
+@client.command()
+async def pat(ctx) :
+    await ctx.send(content="WIP")
+
+@client.command()
+async def hug(ctx) :
+    await ctx.send(content="WIP")

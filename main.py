@@ -11,6 +11,8 @@ import math
 #custom imports
 from globals import *
 from utils import *
+import general_commands
+import help
 import admin
 import minesweeper
 import interpreters
@@ -54,10 +56,6 @@ async def on_member_join(member) :
 
     await member.guild.get_channel(int(joinchannel)).send(random.choice(joinmessages).format(user=member.mention, guild=member.guild))
 
-@client.command()
-async def ping(ctx) :
-    await ctx.send("Pong! Current ping: {} ms!".format(math.floor(client.latency * 10000)/10))
-
 async def remove_link(message) :
     channel = message.channel
     id = message.author.id
@@ -84,6 +82,7 @@ async def remove_link(message) :
 #async def on_member_ban(guild, user) :
 #
 
+#kinda useless atm, might make it available to users using a setting later
 async def handle_codeblock(message) :
     block = re.search("```((.|\n)+)```", message.content)
     other_content = message.content.replace(block.group(), "")
@@ -95,17 +94,9 @@ async def handle_codeblock(message) :
 
     data = urllib.parse.quote(other_content + code, safe='~()*!.\'')
     payload = {"code": data, "expiresIn": "1w"}
-    #print(json.dumps(payload))
-    #r = requests.post(PASTE_MYST, data=json.dumps(payload))
-#    payload = '{' + '''
-#    "code": "{data}",
-#    "expiresIn": "1w"
-#'''.format(data=data) + '}'
-    #print(payload)
+
     r = requests.post(PASTE_MYST + "api/paste", json=payload)
-    #print(r.text)
-    #print(r.status_code)
-    #print(r.json())
+
     json_data = r.json()
     link = PASTE_MYST + json_data["id"]
     await message.channel.send("[{}]\nLarge codeblock detected!\nThe message and the codeblock have been neatly packaged and uploaded to the internet!\nYou can find it here: {} <:TsuSmileBot:541997306413580288>\nPS: You can find the rest of the message in the link as well, as a comment.".format(message.author.mention, link))
@@ -116,6 +107,7 @@ async def on_message(message) :
     if message.author.id != BOT_ID :
         if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
             await remove_link(message)
+        ###Just uncommented the next 2 lines to make the bot upload codeblocks to paste.myst.rs and send the link
         #elif (not message.author.bot) and has_big_codeblock(message) :
         #    await handle_codeblock(message)
         elif check_word_blacklist(message) :
