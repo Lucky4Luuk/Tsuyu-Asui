@@ -44,13 +44,10 @@ async def expand(ctx) :
     await ctx.send(content=result)
 
 @client.command()
-async def pat(ctx, user = None) :
+async def pat(ctx, user: discord.Member = None) :
     mention = "themself :O"
     if user :
-        try :
-            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
-        except Exception :
-            mention = "invalid user"
+        mention = user.mention
     async with aiohttp.ClientSession() as cs:
         async with cs.get("https://nekos.life/api/v2/img/pat") as r:
             res = await r.json()
@@ -60,13 +57,10 @@ async def pat(ctx, user = None) :
             await ctx.send(embed=e)
 
 @client.command()
-async def hug(ctx, user = None) :
+async def hug(ctx, user: discord.Member = None) :
     mention = "themself :O"
     if user :
-        try :
-            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
-        except Exception :
-            mention = "invalid user"
+        mention = user.mention
     async with aiohttp.ClientSession() as cs:
         async with cs.get("https://nekos.life/api/v2/img/hug") as r:
             res = await r.json()
@@ -76,13 +70,10 @@ async def hug(ctx, user = None) :
             await ctx.send(embed=e)
 
 @client.command()
-async def slap(ctx, user = None) :
+async def slap(ctx, user: discord.Member = None) :
     mention = "themself :O"
     if user :
-        try :
-            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
-        except Exception :
-            mention = "invalid user"
+        mention = user.mention
     async with aiohttp.ClientSession() as cs:
         async with cs.get("https://nekos.life/api/v2/img/slap") as r:
             res = await r.json()
@@ -92,13 +83,10 @@ async def slap(ctx, user = None) :
             await ctx.send(embed=e)
 
 @client.command()
-async def tickle(ctx, user = None) :
+async def tickle(ctx, user: discord.Member = None) :
     mention = "themself :O"
     if user :
-        try :
-            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
-        except Exception :
-            mention = "invalid user"
+        mention = user.mention
     async with aiohttp.ClientSession() as cs:
         async with cs.get("https://nekos.life/api/v2/img/tickle") as r:
             res = await r.json()
@@ -108,13 +96,10 @@ async def tickle(ctx, user = None) :
             await ctx.send(embed=e)
 
 @client.command()
-async def kiss(ctx, user = None) :
+async def kiss(ctx, user: discord.Member = None) :
     mention = "themself :O"
     if user :
-        try :
-            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
-        except Exception :
-            mention = "invalid user"
+        mention = user.mention
     async with aiohttp.ClientSession() as cs:
         async with cs.get("https://nekos.life/api/v2/img/kiss") as r:
             res = await r.json()
@@ -124,13 +109,10 @@ async def kiss(ctx, user = None) :
             await ctx.send(embed=e)
 
 @client.command()
-async def poke(ctx, user = None) :
+async def poke(ctx, user: discord.Member = None) :
     mention = "themself :O"
     if user :
-        try :
-            mention = ctx.message.guild.get_member(int(user.replace("<","").replace("@","").replace(">","").replace("!","").strip())).mention + "!"
-        except Exception :
-            mention = "invalid user"
+        mention = user.mention
     async with aiohttp.ClientSession() as cs:
         async with cs.get("https://nekos.life/api/v2/img/poke") as r:
             res = await r.json()
