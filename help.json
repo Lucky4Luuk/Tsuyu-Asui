@@ -41,7 +41,7 @@
     {"name": "ta!get_warns <id>", "value": " - *Gets the amount of warnings a person has!*", "inline": false},
     {"name": "ta!set_max_warns <number>", "value": " - *Sets the amount of warnings a person can have before they get kicked!*", "inline": false},
     {"name": "ta!get_max_warns", "value": " - *Gets the amount of warnings a person can have before they get kicked!*", "inline": false},
-    {"name": "ta!set_word_blacklist <list>", "value": " - *Sets the word blacklist. Any messages with these words get deleted. List is specified as words separated by commas, no spaces.", "inline": false},
+    {"name": "ta!set_word_blacklist <list>", "value": " - *Sets the word blacklist. Any messages with these words get deleted. List is specified as words separated by commas, no spaces.*", "inline": false},
     {"name": "ta!get_word_blacklist", "value": " - *Gets the word blacklist.*", "inline": false},
     {"name": "ta!set_slowmode_delay <number>", "value": " - *Sets the slowmode delay for the current channel. Kind of useless, as  you can set it using the GUI.*", "inline": false},
     {"name": "ta!set_welcome_channel <id/channel-mention>", "value": " - *Sets the welcome channel for new people!*", "inline": false},
