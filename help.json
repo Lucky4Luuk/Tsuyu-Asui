@@ -45,6 +45,8 @@
     {"name": "ta!get_word_blacklist", "value": " - *Gets the word blacklist.*", "inline": false},
     {"name": "ta!set_slowmode_delay <number>", "value": " - *Sets the slowmode delay for the current channel. Kind of useless, as  you can set it using the GUI.*", "inline": false},
     {"name": "ta!set_welcome_channel <id/channel-mention>", "value": " - *Sets the welcome channel for new people!*", "inline": false},
-    {"name": "ta!get_welcome_channel", "value": " - *Gets the welcome channel for new people!*", "inline": false}
+    {"name": "ta!get_welcome_channel", "value": " - *Gets the welcome channel for new people!*", "inline": false},
+    {"name": "ta!set_join_message <message>", "value": " - *Sets the join message for new members! Possible dynamic values are {user} and {guild}.*", "inline": false},
+    {"name": "ta!get_join_message", "value": " - *Gets the current join message for new members!*", "inline": false}
   ]
 }
