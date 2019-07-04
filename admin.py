@@ -66,7 +66,7 @@ async def warn(ctx) :
         if is_moderator(message.author) :
             #do a warn
             args = message.content[8:].split(" ")
-            id = args[0].replace("<","").replace("@","").replace(">","").replace("!","").strip()
+            id = args[0].strip('"" @ <>')
             if id != "" and id.isdigit() :
                 member = message.guild.get_member(int(id))
                 if message.author.top_role.position > member.top_role.position :
@@ -107,7 +107,7 @@ async def kick(ctx) :
         if is_moderator(message.author) :
             #do a kick
             args = message.content[8:].split(" ")
-            id = args[0].replace("<","").replace("@","").replace(">","").replace("!","").strip()
+            id = args[0].strip('"" @ <>')
             if id != "" and id.isdigit() :
                 member = message.guild.get_member(int(id))
                 if message.author.top_role.position > member.top_role.position :
@@ -142,7 +142,7 @@ async def ban(ctx) :
         if is_moderator(message.author) :
             #do a ban
             args = message.content[7:].split(" ")
-            id = args[0].replace("<","").replace("@","").replace(">","").replace("!","").strip()
+            id = args[0].strip('"" @ <>')
             if id != "" and id.isdigit() :
                 member = message.guild.get_member(int(id))
                 if message.author.top_role.position > member.top_role.position :
@@ -260,7 +260,7 @@ async def set_warning_channel(ctx) :
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             #do a edit
-            channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
+            channel_id = str(message.content[23:].strip('"" # <>'))
             guild = message.guild
             configs[guild.id]["Mod"]["TextChannel"] = channel_id
             await ctx.send(content="The warning channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(channel_id).mention, channel_id))
@@ -315,7 +315,7 @@ async def set_welcome_channel(ctx) :
     if message.author.guild_permissions :
         if is_moderator(message.author) :
             #do a edit
-            channel_id = str(message.content[23:].replace("<","").replace("#","").replace(">",""))
+            channel_id = str(message.content[23:].strip('"" # <>'))
             guild = message.guild
             configs[guild.id]["JoinChannel"] = channel_id
             await ctx.send(content="The welcome channel has been set!\nChannel: {} - ID: {}".format(guild.get_channel(int(channel_id)).mention, channel_id))
