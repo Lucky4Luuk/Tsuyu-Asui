@@ -14,6 +14,33 @@ async def admin(ctx) :
         await ctx.send(content=generate_error("303"))
 
 @client.command()
+async def set_channel_cooldown(ctx) :
+    message = ctx.message
+    if message.author.guild_permissions :
+        if is_moderator(message.author) :
+            #Set the current channel's cooldown
+            channel = ctx.channel
+            cooldown = message.content[24:].strip().replace(" ","")
+            letter = cooldown[-1:]
+            if cooldown.isdigit() and not letter.isdigit() and (letter.contains("m") or letter.contains("h") or letter.contains("d") or letter.contains("w") or len(letter)==0):
+                if len(letter)==0 :
+                    letter = "1"
+                if configs[message.guild.id]["Channels"] :
+                    if configs[message.guild.id]["Channels"][channel.id] :
+                        configs[message.guild.id]["Channels"][channel.id]["Cooldown"] = int(cooldown) * int(letter.cooldown.replace("m","60").replace("h","3600").replace("d","86400").replace("w","604800"))
+                    else :
+                        configs[message.guild.id]["Channels"][channel.id] = {"Cooldown":int(cooldown)}
+                else :
+                    configs[message.guild.id]["Channels"] = {}
+                    configs[message.guild.id]["Channels"][channel.id] = {"Cooldown":int(cooldown)}
+            else :
+                await ctx.send(content=generate_error(""))
+        else :
+            await ctx.send(content=generate_erorr("302"))
+    else :
+        await ctx.send(content=generate_error("303"))
+
+@client.command()
 async def set_word_blacklist(ctx) :
     message = ctx.message
     if message.author.guild_permissions :
