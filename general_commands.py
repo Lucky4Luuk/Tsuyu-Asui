@@ -15,6 +15,15 @@ async def status(ctx) :
         await ctx.send(embed=e)
 
 @client.command()
+async def server_status(ctx) :
+    owner = ctx.guild.owner
+    e = discord.Embed(description="[{0} - *by {1}*]".format(ctx.guild.name, owner.name), colour=FROG_GREEN)
+    e.add_field(name="** **", value="Members: {}".format(len(ctx.guild.members)), inline=False)
+    e.add_field(name="** **", value="Boost Level: {}/3".format(ctx.guild.premium_tier), inline=False)
+    e.add_field(name="** **", value="MFA Level: {}".format(ctx.guild.mfa_level), inline=True)
+    e.add_field(name="** **", value="Partnered: ".format( ("✅" if owner.partner else "<:redtick:567088349484023818>") ), inline=False)
+
+@client.command()
 async def help_run(ctx) :
     await ctx.send(content="If you would like to customize my code and run it yourself, please go to my github page!\nInstructions on how to run it can be found in the readme file.\nGithub: {}".format(GITHUB))
 
