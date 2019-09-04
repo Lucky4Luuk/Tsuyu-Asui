@@ -1,4 +1,5 @@
 from globals import *
+from utils import *
 
 @client.command()
 async def ping(ctx) :
@@ -14,14 +15,20 @@ async def status(ctx) :
         e.add_field(name="** **", value="**GUILDS:** {}".format(guilds), inline=True)
         await ctx.send(embed=e)
 
-@client.command()
+#TODO: alias wtf lol
+@client.command(alias="server")
 async def server_status(ctx) :
     owner = ctx.guild.owner
-    e = discord.Embed(description="[{0} - *by {1}*]".format(ctx.guild.name, owner.name), colour=FROG_GREEN)
-    e.add_field(name="** **", value="Members: {}".format(len(ctx.guild.members)), inline=False)
-    e.add_field(name="** **", value="Boost Level: {}/3".format(ctx.guild.premium_tier), inline=False)
-    e.add_field(name="** **", value="MFA Level: {}".format(ctx.guild.mfa_level), inline=True)
-    e.add_field(name="** **", value="Partnered: ".format( ("✅" if owner.partner else "<:redtick:567088349484023818>") ), inline=False)
+    features = ctx.guild.features
+    e = discord.Embed(colour=FROG_GREEN)
+    e.set_author(name="[**{0}** - *by {1}*]".format(ctx.guild.name, owner.name), icon_url=ctx.guild.icon_url)
+    e.add_field(name="** **", value="**Members:** {}".format(len(ctx.guild.members)), inline=True)
+    e.add_field(name="** **", value="**Boost Level:** {}/3".format(ctx.guild.premium_tier), inline=True)
+    e.add_field(name="** **", value="**Created at:** {}".format(ctx.guild.created_at.strftime("%b {}, %Y").format(int_to_ordinal(int(ctx.guild.created_at.strftime("%d"))))), inline=False)
+    e.add_field(name="** **", value="**MFA Level:** {}".format(ctx.guild.mfa_level), inline=True)
+    e.add_field(name="** **", value="**Partnered:** {}".format( ("✅" if "PARTNERED" in features else "❌") ), inline=True)
+    e.set_footer(text="Kindly provided by Tsuyu Asui")
+    await ctx.send(embed=e)
 
 @client.command()
 async def help_run(ctx) :

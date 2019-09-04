@@ -2,6 +2,16 @@ from globals import *
 import datetime
 import discord
 
+def int_to_ordinal(num) :
+    text = str(num)
+    end_digit = int(text[-2:])
+    if end_digit == 11 or end_digit == 12 or end_digit == 13: return text + "th"
+    end_digit = int(text[-1:])
+    if end_digit == 1: return text + "st"
+    if end_digit == 2: return text + "nd"
+    if end_digit == 3: return text + "rd"
+    return text + "th"
+
 def has_big_codeblock(message) :
     block = re.search("```((.|\n)+)```", message.content)
     if block and (len(block.group()) > 540 or len(block.group().split("\n")) > 12) :
