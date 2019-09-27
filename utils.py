@@ -42,6 +42,12 @@ async def update_presence_guild() :
 def generate_error(code) :
     return "ERROR {}: {} <a:TsuTearsBot:541326614143959050>".format(code, ERROR_CODES[code])
 
+def save_main_config() :
+    f = open("main_config.json", "w+")
+    f.truncate()
+    f.write(json.dumps(main_config, indent="  "))
+    f.close()
+
 def new_config(guild) :
     print("====Creating Config====\nGuild Name: {}\nID: {}\n\n".format(guild.name, guild.id))
     f = open("empty_config.json", encoding="latin-1")

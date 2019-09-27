@@ -8,6 +8,7 @@ import re
 import urllib.parse
 import math
 import datetime
+import random
 
 if not os.path.isfile("token.txt"):
     print("token.txt was not found, create it and put your token in there")
@@ -26,6 +27,10 @@ f.close()
 f = open("help.json")
 HELP_DATA = json.load(f)
 f.close()
+
+MESSAGE_COOLDOWN = 50
+MESSAGE_SHECKELS = 15
+DAILY_SHECKELS = 750
 
 LUUK_ID = 183315569745985545
 BOT_ID = 515859822441136130
@@ -52,6 +57,9 @@ f.close()
 PASTE_MYST = "https://paste.myst.rs/"
 
 configs = {}
+f = open("main_config.json")
+main_config = json.load(f)
+f.close()
 
 #client = discord.Client()
 client = commands.Bot(command_prefix="ta!", help_command=None)

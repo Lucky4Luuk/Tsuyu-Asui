@@ -116,3 +116,4 @@ dmypy.json
 # Discord Bot
 token.txt
 *-config.json
+main_config.json

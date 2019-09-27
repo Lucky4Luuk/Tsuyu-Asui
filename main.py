@@ -11,6 +11,8 @@ import math
 #custom imports
 from globals import *
 from utils import *
+import error
+import economy
 import general_commands
 import help
 import admin
@@ -18,6 +20,7 @@ import minesweeper
 import interpreters
 import jokes
 import nsfw
+import minigames
 
 @client.event
 async def on_ready():
@@ -106,6 +109,7 @@ async def handle_codeblock(message) :
 @client.event
 async def on_message(message) :
     if message.author.id != BOT_ID :
+        economy.on_message(message)
         if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
             await remove_link(message)
         ###Just uncommented the next 2 lines to make the bot upload codeblocks to paste.myst.rs and send the link
