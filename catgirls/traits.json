@@ -1,0 +1,41 @@
+{
+    "playful": {
+        "courage": 0.5,
+        "extroversion": 2,
+        "laziness": -0.5
+    },
+    "adventurous": {
+        "courage": 2,
+        "laziness": -0.5,
+        "extroversion": 2
+    },
+    "shy": {
+        "courage": -1,
+        "extroversion": -2
+    },
+    "nerdy": {
+        "laziness": -2,
+        "extroversion": -0.5
+    },
+    "sleepy": {
+        "laziness": 2,
+        "extroversion": -1
+    },
+    "calm": {
+        "laziness": 1,
+        "extroversion": -0.5
+    },
+    "gentle": {
+        "laziness": 0.5,
+        "extroversion": -0.5
+    },
+    "vocal": {
+
+    },
+    "intelligent": {
+
+    },
+    "sensitive": {
+        "extroversion": -1.5
+    }
+}

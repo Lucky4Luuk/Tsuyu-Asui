@@ -47,3 +47,15 @@ async def invite(ctx) :
 async def _discord(ctx) :
     await ctx.send(content="Check your DM's! <:TsuSmileBot:541997306413580288>")
     await ctx.message.author.send(content="Here's my Discord invite link: https://discord.gg/He9ZcwR <:TsuComfyBot:541315853149536257>")
+
+@client.command()
+async def shutdown(ctx) :
+    if int(ctx.message.author.id) == LUUK_ID :
+        await client.logout()
+        client.close()
+        sys.exit(0)
+
+@client.command()
+async def suggest(ctx, suggestion) :
+    luuk = client.get_user(LUUK_ID)
+    await luuk.send(content="User {} made the following suggestion:\n{}".format(ctx.message.author, suggestion))

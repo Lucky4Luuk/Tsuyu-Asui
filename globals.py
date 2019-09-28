@@ -1,7 +1,7 @@
 import os
 import json
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import asyncio
 import requests
 import re
@@ -9,6 +9,9 @@ import urllib.parse
 import math
 import datetime
 import random
+import sys
+import io
+from PIL import Image, ImageFont, ImageDraw
 
 if not os.path.isfile("token.txt"):
     print("token.txt was not found, create it and put your token in there")
@@ -28,9 +31,16 @@ f = open("help.json")
 HELP_DATA = json.load(f)
 f.close()
 
-MESSAGE_COOLDOWN = 50
-MESSAGE_SHECKELS = 15
+MESSAGE_COOLDOWN = 60
+MESSAGE_SHECKELS = 10
 DAILY_SHECKELS = 750
+
+f = open("catgirls/breeds.json")
+BREEDS = json.load(f)
+f.close()
+f = open("catgirls/traits.json")
+TRAITS = json.load(f)
+f.close()
 
 LUUK_ID = 183315569745985545
 BOT_ID = 515859822441136130

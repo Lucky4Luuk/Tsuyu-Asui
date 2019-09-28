@@ -21,9 +21,10 @@ import interpreters
 import jokes
 import nsfw
 import minigames
+import catgirl_pet
 
 @client.event
-async def on_ready():
+async def on_ready() :
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
@@ -31,6 +32,8 @@ async def on_ready():
     print('------')
     await update_presence_guild()
     import_all_configs()
+
+    minigames.lottery_check.start()
 
 @client.event
 async def on_guild_join(guild) :
@@ -109,6 +112,14 @@ async def handle_codeblock(message) :
 @client.event
 async def on_message(message) :
     if message.author.id != BOT_ID :
+        author_id = str(message.author.id)
+        if not author_id in main_config["Profiles"].keys() :
+            main_config["Profiles"][author_id] = {
+                "LastMessage": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "Yen": 0,
+                "LotteryTickets": 0
+            }
+
         economy.on_message(message)
         if "discordapp.com/invite/" in message.content or "discord.gg/" in message.content :
             await remove_link(message)
