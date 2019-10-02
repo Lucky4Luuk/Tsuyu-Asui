@@ -1,6 +1,10 @@
 from globals import *
 from utils import *
 
+@client.event
+async def on_reaction_add(reaction, user) :
+    print("User {}; Reaction {}")
+
 @client.command()
 async def ping(ctx) :
     await ctx.send(content="Pong! Current ping: {} ms!".format(math.floor(client.latency * 10000)/10))
@@ -16,7 +20,7 @@ async def status(ctx) :
         await ctx.send(embed=e)
 
 #TODO: alias wtf lol
-@client.command(alias="server")
+@client.command(aliases=["server"])
 async def server_status(ctx) :
     owner = ctx.guild.owner
     features = ctx.guild.features
