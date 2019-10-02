@@ -22,6 +22,7 @@ import jokes
 import nsfw
 import minigames
 import catgirl_pet
+import role_management
 
 @client.event
 async def on_ready() :

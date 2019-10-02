@@ -1,10 +1,6 @@
 from globals import *
 from utils import *
 
-@client.event
-async def on_reaction_add(reaction, user) :
-    print("User {}; Reaction {}")
-
 @client.command()
 async def ping(ctx) :
     await ctx.send(content="Pong! Current ping: {} ms!".format(math.floor(client.latency * 10000)/10))
@@ -25,7 +21,7 @@ async def server_status(ctx) :
     owner = ctx.guild.owner
     features = ctx.guild.features
     e = discord.Embed(colour=FROG_GREEN)
-    e.set_author(name="[**{0}** - *by {1}*]".format(ctx.guild.name, owner.name), icon_url=ctx.guild.icon_url)
+    e.set_author(name="[**{0}** - *by {1}*]".format(ctx.guild.name, owner.name), icon_url=ctx.guild.icon_url, url=ctx.guild.icon_url)
     e.add_field(name="** **", value="**Members:** {}".format(len(ctx.guild.members)), inline=True)
     e.add_field(name="** **", value="**Boost Level:** {}/3".format(ctx.guild.premium_tier), inline=True)
     e.add_field(name="** **", value="**Created at:** {}".format(ctx.guild.created_at.strftime("%b {}, %Y").format(int_to_ordinal(int(ctx.guild.created_at.strftime("%d"))))), inline=False)
