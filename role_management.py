@@ -22,10 +22,20 @@ async def on_raw_reaction_add(payload) :
     guild = client.get_guild(guildid)
     channel = guild.get_channel(channelid)
     message = await channel.fetch_message(msgid)
-    user = guild.get_member(userid)
+    member = guild.get_member(userid)
 
     if userid != client.user.id :
-        print("User {}; Emoji {}".format(user, emoji.name))
+        print("Member {}; Emoji {}".format(member, emoji.name))
+        if configs[guild.id]["ReactMessage"] :
+            print("ReactMessage")
+            if channelid == configs[guild.id]["ReactMessage"][0] and msgid == configs[guild.id]["ReactMessage"][1] :
+                print("Correct channel/message")
+                for item in configs[guild.id]["ReactRoles"] :
+                    if int(item[0]) == emoji.id :
+                        print("Assigning member a role")
+                        role = guild.get_role(int(item[1]))
+                        await member.add_roles(role, reason="He clicked the damn button")
+                        print("User received his role!")
 
 @client.event
 async def on_raw_reaction_remove(payload) :
@@ -38,7 +48,17 @@ async def on_raw_reaction_remove(payload) :
     guild = client.get_guild(guildid)
     channel = guild.get_channel(channelid)
     message = await channel.fetch_message(msgid)
-    user = guild.get_member(userid)
+    member = guild.get_member(userid)
 
     if userid != client.user.id :
-        print("User {}; Emoji {}".format(user, emoji.name))
+        print("Member {}; Emoji {}".format(member, emoji.name))
+        if configs[guild.id]["ReactMessage"] :
+            print("ReactMessage")
+            if channelid == configs[guild.id]["ReactMessage"][0] and msgid == configs[guild.id]["ReactMessage"][1] :
+                print("Correct channel/message")
+                for item in configs[guild.id]["ReactRoles"] :
+                    if int(item[0]) == emoji.id :
+                        print("Removing a role from member")
+                        role = guild.get_role(int(item[1]))
+                        await member.remove_roles(role, reason="He clicked the damn button")
+                        print("Remove user's role!")

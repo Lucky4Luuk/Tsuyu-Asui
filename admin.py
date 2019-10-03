@@ -14,6 +14,40 @@ async def admin(ctx) :
         await ctx.send(content=generate_error("303"))
 
 @client.command()
+async def set_react_role_msg(ctx, channel_id, message_id) :
+    if channel_id.isdigit() and message_id.isdigit() :
+        msg = await ctx.guild.get_channel(int(channel_id)).fetch_message(int(message_id))
+        if msg :
+            # emoji = await ctx.guild.fetch_emoji(629249328757735444)
+            # await msg.add_reaction(emoji)
+            configs[ctx.guild.id]["ReactMessage"] = [int(channel_id), int(message_id)]
+            configs[ctx.guild.id]["ReactRoles"] = []
+            save_config(ctx.guild)
+            await ctx.send(content="Reaction Role Message has been set!")
+        else :
+            await ctx.send(content="Message not found")
+    else :
+        await ctx.send(content=generate_error("307"))
+
+@client.command()
+async def add_react_role(ctx, emoji_id, role_id) :
+    if emoji_id.isdigit() and role_id.isdigit() :
+        if configs[ctx.guild.id]["ReactMessage"] :
+            channel_id = configs[ctx.guild.id]["ReactMessage"][0]
+            message_id = configs[ctx.guild.id]["ReactMessage"][1]
+            msg = await ctx.guild.get_channel(channel_id).fetch_message(message_id)
+            emoji = await ctx.guild.fetch_emoji(int(emoji_id))
+            role = ctx.guild.get_role(int(role_id))
+            configs[ctx.guild.id]["ReactRoles"].append([int(emoji_id), int(role_id)])
+            save_config(ctx.guild)
+            await msg.add_reaction(emoji)
+            await ctx.send(content="Reaction Role added!")
+        else :
+            await ctx.send(content="React message not set yet. Please set it using ta!ste_react_role_msg first")
+    else :
+        await ctx.send(content=generate_error("307"))
+
+@client.command()
 async def set_channel_cooldown(ctx) :
     message = ctx.message
     if message.author.guild_permissions :
